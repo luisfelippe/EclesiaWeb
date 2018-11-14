@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="controlefinanceiro.cln.cdp.Lancamento" table="lancamento">
+    <id column="id_lancamento" name="id" type="long">
+      <generator class="identity"/>
+    </id>
+    <property name="valor" type="double">
+      <column name="valor"/>
+    </property>
+    <property name="data" type="java.sql.Date">
+      <column name="data_lancamento"/>
+    </property>
+    <property name="descricao" type="java.lang.String">
+      <column name="descricao"/>
+    </property>
+    <many-to-one class="controlefinanceiro.cln.cdp.CategoriaLancamento" fetch="join" name="categoria">
+        <column name="id_categoria"/>
+    </many-to-one>
+    <property name="tipo">
+        <column name="tipo" />
+        <type name="org.hibernate.type.EnumType">
+            <param name="enumClass">controlefinanceiro.cln.cdp.TipoLancamento</param>
+        </type>
+    </property>
+    <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="join" name="autor">
+        <column name="id_autor"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="join" name="membro">
+        <column name="id_membro"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

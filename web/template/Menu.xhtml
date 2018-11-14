@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition >
+        <nav class="aw-menu">
+            <ul>
+                <li class="#{(principalBean.formPrincipal) ? 'is-selected' : ''}">
+                    <h:link outcome="principal.xhtml"><i class="fa  fa-fw  fa-home"></i>Dashboard</h:link>
+                </li>
+                <li class="#{(principalBean.formSecretaria) ? 'is-selected' : ''}">
+                    <h:link outcome="membros.xhtml"><i class="fa  fa-fw  fa-user"></i>Secretaria</h:link>
+                </li>
+                <li class="#{(principalBean.formFinanceiro) ? 'is-selected' : ''}">
+                    <h:link outcome="financeiro.xhtml"><i class="fa  fa-fw  fa-file-text"></i>Financeiro</h:link>
+                </li>
+                <li class="#{(principalBean.formConfiguracoes) ? 'is-selected' : ''}">
+                    <h:link outcome="configuracoes.xhtml"><i class="fa  fa-fw  fa-cog"></i>Configurações</h:link>
+                </li>
+            </ul>
+        </nav>
+    </ui:composition>
+</html>

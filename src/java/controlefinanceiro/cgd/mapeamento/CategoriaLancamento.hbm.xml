@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="controlefinanceiro.cln.cdp.CategoriaLancamento" table="categoria_lancamento">
+        <id column="id_categoria_lancamento" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="descricao" type="java.lang.String">
+            <column name="descricao" />
+        </property>
+        <property name="tipo">
+            <column name="tipo" />
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">controlefinanceiro.cln.cdp.TipoLancamento</param>
+            </type>
+        </property>
+    </class>
+</hibernate-mapping>

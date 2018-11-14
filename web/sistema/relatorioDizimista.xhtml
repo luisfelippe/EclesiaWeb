@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">
+        
+        <ui:define name="topo">
+            <h:form>
+                <p:breadCrumb>
+                    <p:menuitem value="Pincipal" action="principal"/>
+                    <p:menuitem value="Relatório de Dizimistas" action="relatorioDizimista" />
+                </p:breadCrumb>  
+            </h:form>
+        </ui:define>
+        <ui:define name="content">
+            <center>
+                <p:panel id="content">
+                    <f:facet name="header">
+                        .:: Relatório de Dizimistas ::.
+                    </f:facet>
+                    <h:panelGrid cellpadding="0" cellspacing="0" class="valores">                            
+                        <h:form id="form"> 
+                            <h:outputText value="Informe o período a ser consultado"/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="5" class="valores" columnClasses="col1">
+                                <h:outputLabel value="Data Inicial:" for="dtIni"/>
+                                <p:calendar id="dtIni" navigator="true" yearRange="c-80:c+0" value="#{relDizimistaBean.dataIni}" pattern="dd/MM/yyyy" locale="pt_BR"  />
+                                
+                                <h:outputLabel value="Data Final:" for="dtFim"/>
+                                <p:calendar id="dtFim" navigator="true" yearRange="c-80:c+0" value="#{relDizimistaBean.dataFim}" pattern="dd/MM/yyyy" locale="pt_BR"  />
+                            </h:panelGrid>
+                            <h:panelGrid columns="3" cellpadding="0" cellspacing="5">
+                                <p:commandButton value="Buscar" ajax="false" action="#{relDizimistaBean.buscar()}"/>
+                                <p:commandButton value="Limpar" ajax="false" action="#{relDizimistaBean.limpar()}" />
+                                <p:commandButton value="Cancelar" ajax="false" action="#{relDizimistaBean.cancelar()}" immediate="true"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                </p:panel>
+                <h:form>
+                    <p:dataTable id="dizimistas" var="dizimo" value="#{relDizimistaBean.lista}" rowKey="#{membro.nome}" style="width: 700px; margin-bottom: 45px;" rendered="#{relDizimistaBean.lista.size() > 0}">
+                        <p:column sortBy="#{dizimo.membro.id}" style="width: 15%;">
+                            <f:facet name="header">
+                                <h:outputText value="Cód. Membro" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.membro.id}" />
+                        </p:column>
+                        <p:column sortBy="#{dizimo.membro.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Nome" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.membro.nome}" />
+                        </p:column>
+                        <p:column sortBy="#{dizimo.data}">
+                            <f:facet name="header">
+                                <h:outputText value="Data" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.data}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                            </h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{dizimo.valor}" footerText="Total: #{relDizimistaBean.total}">
+                            <f:facet name="header">
+                                <h:outputText value="Valor" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.valor}" />
+                        </p:column>
+                        <!--<f:facet name="footer">
+                            <h:outputText value="Total: #{relDizimistaBean.total}"/>
+                        </f:facet>-->
+                    </p:dataTable>
+                    <h:commandLink rendered="#{relDizimistaBean.lista.size() > 0}">  
+                        <p:graphicImage value="./images/pdf.png" />  
+                        <p:dataExporter type="pdf" target="dizimistas" fileName="dizimistas" encoding="UTF-8" preProcessor="#{relDizimistaBean.preProcessPDF}"/>  
+                    </h:commandLink>
+                </h:form>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.Foto" table="foto" >
+        <id column="ID_FOTO" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="descricao" type="java.lang.String">
+            <column name="descricao"/>
+        </property>
+        <property name="caminho" type="java.lang.String">
+            <column name="caminho"/>
+        </property>
+        <property name="nrOrdem" type="int">
+            <column name="nrOrdem"/>
+        </property>
+        <many-to-one class="ControleMembros.CLN.CDP.Pessoa" fetch="join" name="pessoa">
+            <column name="ID_PESSOA"/>
+        </many-to-one>
+    </class>
+  
+</hibernate-mapping>

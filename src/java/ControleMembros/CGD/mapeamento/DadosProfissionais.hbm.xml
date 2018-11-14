@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="ControleMembros.CLN.CDP.DadosProfissionais" table="dados_profissionais">
+        <id column="ID_DADOS_PROFISSIONAIS" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="select" name="membro" lazy="false">
+            <column name="MEMBRO"/>
+        </many-to-one>
+        <property name="nome" type="java.lang.String">
+            <column name="NOME_EMPRESA" />
+        </property>
+        <property name="endereco" type="java.lang.String">
+            <column name="ENDERECO" />
+        </property>
+        <property name="numero" type="long">
+            <column name="NUMERO" />
+        </property>
+        <many-to-one class="ControleMembros.CLN.CDP.Bairro" fetch="select" name="bairro" lazy="false">
+            <column name="BAIRRO"/>
+        </many-to-one>
+        <property name="cep" type="java.lang.String">
+            <column name="CEP" />
+        </property>
+    </class>
+</hibernate-mapping>

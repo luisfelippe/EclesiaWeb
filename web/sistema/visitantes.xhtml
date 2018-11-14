@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">
+        
+        <ui:define name="topo">
+                <h:form>
+                    <p:breadCrumb>
+                        <p:menuitem value="Pincipal" action="principal"/>
+                        <p:menuitem value="Visitantes" action="visitantes" />
+                    </p:breadCrumb>  
+                </h:form>
+        </ui:define>
+        <ui:define name="content">
+            <center>
+                
+                <p:panel id="content">
+                    <f:facet name="header">
+                        .:: Cadastro de Visitante ::.
+                    </f:facet>                    
+                    <h:form id="form">                        
+                        <table cellspacing="5" cellpadding="0">
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Código: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <h:outputText value="#{visitanteBean.visitante.id}" style="color: red; font-weight: bold;"/>
+                                </td>                                
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Nome: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{visitanteBean.visitante.nome}" style="width: 460px;" required="true"/>
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Sexo: " styleClass="label"/> 
+                                </td>
+                                <td>
+                                    <p:selectOneRadio id="options" value="#{visitanteBean.visitante.masculino}" required="true">  
+                                        <f:selectItem itemLabel="Masculino" itemValue="M" />  
+                                        <f:selectItem itemLabel="Feminino" itemValue="F" />  
+                                    </p:selectOneRadio>
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Idade: " styleClass="label"/>
+                                </td>
+                                <td align="right">
+                                    <p:spinner id="idade" value="#{visitanteBean.visitante.idade}" size="28"/>
+                                </td>
+                            </tr>                          
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Endereço: " styleClass="label" />
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{visitanteBean.endereco.logradouro}" style="width: 460px;"/>
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="E-mail: " styleClass="label" />
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{visitanteBean.visitante.email}" style="width: 460px;"/>
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Telefone 1: " styleClass="label"/>
+                                </td>
+                                <td>
+                                    <p:inputMask value="#{visitanteBean.telefone1.numero}"  mask="(99) 9999-9999" required="true"/>                    
+                                </td>
+                                <td>
+                                    <h:outputLabel value="Telefone 2: " styleClass="label"/>
+                                </td>
+                                <td>
+                                    <p:inputMask value="#{visitanteBean.telefone2.numero}"  mask="(99) 9999-9999" style="width: 216px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Telefone 3: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputMask value="#{visitanteBean.telefone3.numero}"  mask="(99) 9999-9999"/>
+                                </td>                                
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Data Visita: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:calendar id="cal" navigator="true" value="#{visitanteBean.visitante.dataVisita}" pattern="dd/MM/yyyy" locale="pt_BR" timeZone="America/Sao_Paulo" required="true"/>
+                                </td>
+                            </tr>                                
+                            <tr>
+                                <td colspan="4" style="text-align: right;">
+                                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{visitanteBean.salvarAction()}" ajax="false"/>
+                                    <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" actionListener="#{visitanteBean.reset()}" update="form" immediate="true" />
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{visitanteBean.cancelar()}" ajax="false" immediate="true"/>
+                                </td>
+                            </tr>                        
+                        </table>   
+                    </h:form>
+                </p:panel>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>
+<!--
+40
+dist 14.91
+cal 671-->

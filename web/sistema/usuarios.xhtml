@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">
+        
+        <ui:define name="topo">
+                <h:form>
+                    <p:breadCrumb>
+                        <p:menuitem value="Pincipal" action="principal"/>
+                        <p:menuitem value="Usuários" action="usuarios" />
+                    </p:breadCrumb>  
+                </h:form>
+        </ui:define>
+        <ui:define name="content">
+            <center>
+               
+                <p:panel id="contentCad" rendered="#{usuarioBean.usrSelected != null}">
+                    <f:facet name="header">
+                        .:: Cadastro de Usuários ::.
+                    </f:facet>                    
+                    <h:form id="formCad">                        
+                        <table cellspacing="5" cellpadding="0">                            
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Código: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <h:outputLabel value="#{usuarioBean.usrSelected.id}" styleClass="label" style="color: red;"/>
+                                </td>                            
+                            </tr>                                                   
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Nome: " styleClass="label" />
+                                </td>
+                                <td colspan="3">
+                                    <h:outputLabel value="#{usuarioBean.usrSelected.nome}" styleClass="label" style="color: blue;"/>
+                                </td>                            
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <p:separator/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Login: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{usuarioBean.usr.login}" style="width: 460px;" required="true"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Senha: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:password value="#{usuarioBean.usr.senha}" style="width: 460px;" required="true"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="text-align: right;">
+                                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{usuarioBean.salvarAction()}" ajax="false"/>
+<!--                                    <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" actionListener="#{usuarioBean.reset()}" update="formCad" immediate="true" />-->
+                                    <p:commandButton value="Excluir" icon="ui-icon-trash" action="#{usuarioBean.excluirAction()}" ajax="false" immediate="true"/>
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{usuarioBean.cancelar2()}" ajax="false" immediate="true"/>
+                                </td>
+                            </tr>                        
+                        </table>   
+                    </h:form>
+                </p:panel>
+                
+                <p:panel id="content" rendered="#{usuarioBean.usrSelected == null}">
+                    <f:facet name="header">
+                        .:: Busca de Membros ::.
+                    </f:facet>                    
+                    <h:form id="form">                        
+                        <table cellspacing="5" cellpadding="0">                            
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Código: " styleClass="label"/>
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{usuarioBean.cod}" style="width: 460px;" required="true"/>
+                                </td>                            
+                            </tr>                                                   
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Nome: " styleClass="label" />
+                                </td>
+                                <td colspan="3">
+                                    <p:inputText value="#{usuarioBean.nome}" style="width: 460px;"/>
+                                </td>                            
+                            </tr>                            
+                            <tr>
+                                <td colspan="4" style="text-align: right;">
+                                    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{usuarioBean.buscarAction()}" ajax="false"/>
+                                    <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" actionListener="#{usuarioBean.reset()}" update="form" immediate="true" />
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{usuarioBean.cancelar()}" ajax="false" />
+                                </td>
+                            </tr>                        
+                        </table>   
+                    </h:form>
+                </p:panel>
+                
+                <h:form rendered="#{usuarioBean.lista.size() > 0 and usuarioBean.usrSelected == null}">
+                    <p:dataTable id="membros" paginator="true" rows="20" var="membro" value="#{usuarioBean.lista}" selection="#{usuarioBean.usrSelected}" selectionMode="single" rowKey="#{membro.nome}" style="width: 700px; margin-bottom: 45px;" rendered="#{usuarioBean.lista.size() > 0}">
+                        <p:column sortBy="#{membro.id}" style="width: 15%;">
+                            <f:facet name="header">
+                                <h:outputText value="Código" />
+                            </f:facet>
+                            <h:outputText value="#{membro.id}" />
+                        </p:column>
+                        <p:column sortBy="#{membro.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Nome" />
+                            </f:facet>
+                            <h:outputText value="#{membro.nome}" />
+                        </p:column>
+                        <p:column style="width:4%">  
+                            <p:commandButton id="editButton" icon="ui-icon-pencil" title="Visualizar" ajax="false">  
+                                <f:setPropertyActionListener value="#{membro}" target="#{usuarioBean.usrSelected}" />  
+                            </p:commandButton>  
+                        </p:column>  
+<!--                        <f:facet name="footer">
+                            <p:commandButton id="selectButton" icon="ui-icon-newwin" value="Visualizar" title="Visualizar" style="float: left;" ajax="false"/>
+                        </f:facet>-->
+                    </p:dataTable>
+                </h:form>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>
+<!--
+40
+dist 14.91
+cal 671-->

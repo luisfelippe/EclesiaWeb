@@ -1,0 +1,179 @@
+/* 
+    Document   : css
+    Created on : 17/04/2013, 23:15:51
+    Author     : LuísFelippe
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body{
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+    background-image: url(../images/logo3_transp.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom right;
+    background-size: 50% auto;  
+    background-color: #f6f6f6;
+}
+
+/*.ui-widget-header {
+    background-color: #888;
+    color: #000;
+}*/
+
+#header {
+    padding: 0px;
+    position: relative;
+    border: 0px;
+    background: none;
+}
+
+#header_content {
+    margin: 5px 0px 0px 0px;
+    font-size: 11px;
+    padding: 0px;
+}
+
+#content, #contentCad {
+    padding: 4px;
+    height: 100%;
+    width: 700px;
+    position: relative;
+    border: 1px solid #A8A8A8;
+    /*background: none;*/
+    margin-top: 10px;
+    margin-bottom: 45px;
+}
+
+div#content_content, div#contentCad_content {
+    background: none;
+}
+
+#menu, #login {
+    padding: 4px;
+    height: 100%;
+    position: relative;
+    border: 0px;
+    background: none;
+}
+
+#content {
+    padding: 4px;
+    height: 100%;
+    width: 900px;
+    position: relative;
+    border: 1px solid #A8A8A8;
+    /*background: none;*/
+    margin-top: 10px;
+    margin-bottom: 45px;
+}
+
+div#content_content {
+    background: none;
+}
+
+.membros:hover {
+    border-color: red;
+}
+
+.visitantes:hover {
+    border-color: red;
+}
+
+.usuarios:hover {
+    border-color: red;
+}
+
+#formMembro {
+    padding: 4px;
+    height: 100%;
+    width: 700px;
+    position: relative;
+    border: 1px solid #A8A8A8;
+    /*background: none;*/
+    margin-top: 10px;
+    margin-bottom: 45px;
+}
+
+div#formMembro_content {
+    background: none;
+}
+
+div#membro:hover {
+    border-color: red;
+}
+
+div#visitante:hover {
+    border-color: red;
+}
+
+div#usuario:hover {
+    border-color: red;
+}
+
+#footer {
+    border: 0px;
+    width: 100%;
+    height: 33px;
+    margin: 0px;
+    padding: 0px;
+    bottom: 0px;
+    position: fixed;
+}
+
+#footer_content {
+    margin: 0px;
+    padding: 0px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.valores {
+    
+}
+
+.col1 {
+    width: 80px;
+    text-align: left;
+}
+
+.botoes {
+    width: 100%;
+    text-align: center;
+}
+
+.colOpt1, .colOpt2, .colOpt3 {}
+
+.label-margin {}
+
+@media only screen and (min-width: 640px) {
+    .colOpt3 { width: 110px !important; }
+    .colOpt2 { width: 70px !important; }
+    .colOpt1 { width: 40px !important; }
+    .label-margin { margin-left: 10px !important; }
+}
+
+.ui-dialog-mask {
+    z-index: 9999 !important;
+}
+
+.ui-dialog {
+    z-index: 10000 !important;
+}
+
+.ui-selectonemenu {
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
+.lbSaida {
+    color: red;
+}
+
+.lbEntrada {
+    color: blue;
+}

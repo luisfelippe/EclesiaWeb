@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.DadosMinisteriais" table="dados_ministeriais">
+        <id column="id_dados_ministeriais" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="dataInicial" type="java.sql.Date">
+            <column name="data_inicial" />
+        </property>
+        <property name="dataFinal" type="java.sql.Date">
+            <column name="data_final" />
+        </property>
+        <many-to-one class="ControleMembros.CLN.CDP.Cargo" fetch="join" name="cargo" not-null="true">
+            <column name="id_cargo"/>
+        </many-to-one>
+        <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="join" name="membro" not-null="true">
+            <column name="id_membro"/>
+        </many-to-one>
+        <property name="obs" type="java.lang.String">
+            <column name="obs" sql-type="text" />
+        </property>
+    </class>
+</hibernate-mapping>

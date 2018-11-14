@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="controlefinanceiro.cln.cdp.TipoSaida" table="tipo_saida">
+        <id column="ID_TIPO_SAIDA" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="Descricao" type="java.lang.String">
+            <column name="DESCRICAO" />
+        </property>
+    </class>
+</hibernate-mapping>

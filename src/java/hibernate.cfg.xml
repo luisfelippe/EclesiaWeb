@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!--    <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>-->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/eclesiaweb?zeroDateTimeBehavior=convertToNull</property>-->
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/proji6?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <!--    <property name="hibernate.connection.password"/>-->
+<!--    <property name="hibernate.connection.password">root_sci4@$*</property>-->
+    <!--<property name="hibernate.connection.password">rf_20&amp;04</property>-->
+        <property name="hibernate.connection.password"></property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="current_session_context_class">thread</property>
+    <property name="show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+    <mapping resource="ControleMembros/CGD/mapeamento/Endereco.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Escolaridade.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Estado_Civil.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Membro.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Pessoa.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Profissao.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Telefone.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Foto.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/TipoTelefone.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Usuario.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Visitante.hbm.xml"/>
+    <!--    <mapping resource="ControleMembros/CGD/mapeamento/EMail.hbm.xml"/>-->
+    <!--    <mapping resource="controlefinanceiro/cgd/mapeamento/Entrada.hbm.xml"/>
+    <mapping resource="controlefinanceiro/cgd/mapeamento/Saida.hbm.xml"/>
+    <mapping resource="controlefinanceiro/cgd/mapeamento/TipoEntrada.hbm.xml"/>
+    <mapping resource="controlefinanceiro/cgd/mapeamento/TipoSaida.hbm.xml"/>-->
+    <mapping resource="controlefinanceiro/cgd/mapeamento/Lancamento.hbm.xml"/>
+    <mapping resource="controlefinanceiro/cgd/mapeamento/CategoriaLancamento.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/GrauParentesco.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Parente.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Pais.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Estado.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Cidade.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Bairro.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/DadosProfissionais.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Ministerio.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/Cargo.hbm.xml"/>
+    <mapping resource="ControleMembros/CGD/mapeamento/DadosMinisteriais.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>
+<!--
+pedido 428744387
+cliente 106592419
+-->

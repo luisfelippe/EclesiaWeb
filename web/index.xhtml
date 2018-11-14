@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="./template/template_1.xhtml">        
+        <ui:define name="content">
+            <h:panelGroup layout="block" style="width: 100%;">
+                <center> 
+                    <p:panel id="login" style="width: fit-content !important;">                                                                             
+                        <p:panelGrid columns="2" style="border: 0px;">  
+                            <f:facet name="header" >  
+                                .::Login::.  
+                            </f:facet>
+                                <h:outputLabel value="Login: " style="font-weight: bold;"/>                                    
+                                <p:inputText id="nome" value="#{loginBean.usr.login}" required="true" styleClass="text" />
+                                <h:outputLabel value="Senha: " style="font-weight: bold;"/>
+                                <p:password id="senha" value="#{loginBean.usr.senha}" required="true" styleClass="text" />  
+                            <f:facet name="footer">  
+                                <p:commandButton value="Entrar" action="#{loginBean.efetuarLogin}" ajax="false" icon="ui-icon-check" style="margin:0px; padding: 0px;"/>  
+                            </f:facet>  
+                        </p:panelGrid>                    
+                    </p:panel>    
+                </center>                                            
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>
+

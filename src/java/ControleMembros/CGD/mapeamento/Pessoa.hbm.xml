@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+  <class name="ControleMembros.CLN.CDP.Pessoa" table="pessoa">
+    <id column="ID_PESSOA" name="id" type="long">
+      <generator class="identity"/>
+    </id>
+    <property name="Nome" type="java.lang.String">
+      <column name="NOME"/>
+    </property>
+    <property name="masculino" type="char">
+      <column name="SEXO"/>
+    </property>
+    <property name="email" type="java.lang.String">
+      <column name="EMAIL"/>
+    </property>
+    <bag cascade="all" fetch="select" name="endereco" lazy="false">
+      <key column="ID_PESSOA"/>
+      <one-to-many class="ControleMembros.CLN.CDP.Endereco"/>
+    </bag>
+<!--    <bag cascade="all" fetch="select" name="email">
+      <key column="ID_PESSOA"/>
+      <one-to-many class="ControleMembros.CLN.CDP.EMail"/>
+    </bag>-->
+    <bag cascade="all" fetch="select" name="telefone" lazy="false">
+      <key column="ID_PESSOA"/>
+      <one-to-many class="ControleMembros.CLN.CDP.Telefone"/>
+    </bag>
+    <bag cascade="all" fetch="select" name="fotos" lazy="false">
+      <key column="ID_PESSOA"/>
+      <one-to-many class="ControleMembros.CLN.CDP.Foto"/>
+    </bag>
+  </class>
+</hibernate-mapping>

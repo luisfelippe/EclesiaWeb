@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">
+        
+        <ui:define name="topo">
+<!--                <h:form>
+                    <p:breadCrumb>
+                        <p:menuitem value="Pincipal" action="principal"/>
+                        <p:menuitem value="Relatório de Visitantes" action="relVisitante" />
+                    </p:breadCrumb>  
+                </h:form>-->
+        </ui:define>
+        <ui:define name="content">
+            <center>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panel id="content">
+                    <f:facet name="header">
+                        .:: Relatório de Visitantes ::.
+                    </f:facet>                    
+                    <h:form id="form">                        
+                        <table cellspacing="5" cellpadding="0" style="width: 560px; text-align: left;">                            
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Data Inicial: " styleClass="label"/>
+                                </td>
+                                <td >
+                                    <p:calendar value="#{relVisitanteBean.dataIni}" />
+                                </td>                            
+                            </tr>                                                   
+                            <tr>
+                                <td>
+                                    <h:outputLabel value="Data Final: " styleClass="label" />
+                                </td>
+                                <td >
+                                    <p:calendar value="#{relVisitanteBean.dataFim}"/>
+                                </td>                            
+                            </tr>                            
+                            <tr>
+                                <td colspan="2" style="text-align: right;">
+                                    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{relVisitanteBean.buscarAction()}" ajax="false"/>
+                                    <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" actionListener="#{relVisitanteBean.reset()}" update="form" immediate="true" />
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{relVisitanteBean.cancelar()}" ajax="false" />
+                                </td>
+                            </tr>                        
+                        </table>   
+                    </h:form>
+                </p:panel>
+                
+                <h:form>
+                    <p:dataTable id="visitantes" paginator="true" rows="20" var="visitante" value="#{relVisitanteBean.lista}" rowKey="#{visitante.nome}" style="width: 700px; margin-bottom: 45px;" rendered="#{relVisitanteBean.lista.size() > 0}">
+                        <p:column sortBy="#{visitante.id}" style="width: 15%;">
+                            <f:facet name="header">
+                                <h:outputText value="Código" />
+                            </f:facet>
+                            <h:outputText value="#{visitante.id}" />
+                        </p:column>
+                        <p:column sortBy="#{visitante.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Nome" />
+                            </f:facet>
+                            <h:outputText value="#{visitante.nome}" />
+                        </p:column>
+                        <p:column sortBy="#{visitante.dataVisita}">
+                            <f:facet name="header">
+                                <h:outputText value="Última Visita" />
+                            </f:facet>
+                            <h:outputText value="#{visitante.dataVisita}" />
+                        </p:column> 
+                    </p:dataTable>
+                </h:form>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>
+<!--
+40
+dist 14.91
+cal 671
+-->

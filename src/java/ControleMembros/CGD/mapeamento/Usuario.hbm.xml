@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.Usuario" table="usuario">
+        <id column="ID_USUARIO" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        
+        <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="select" lazy="false" name="membro">
+          <column name="MEMBRO"/>
+        </many-to-one>
+        <property name="Login" type="java.lang.String">
+            <column name="LOGIN" />
+        </property>
+        <property name="Senha" type="java.lang.String">
+            <column name="SENHA" />
+        </property>
+    </class>
+</hibernate-mapping>

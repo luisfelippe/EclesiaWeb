@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="controlefinanceiro.cln.cdp.Entrada" table="entrada">
+    <id column="ID_ENTRADA" name="id" type="long">
+      <generator class="identity"/>
+    </id>
+    <property name="valor" type="double">
+      <column name="VALOR"/>
+    </property>
+    <property name="data" type="java.sql.Date">
+      <column name="DATA"/>
+    </property>
+    <many-to-one class="controlefinanceiro.cln.cdp.TipoEntrada" fetch="join" name="tipo">
+        <column name="TIPO"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="join" name="usuario">
+        <column name="USUARIO"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.Membro" fetch="join" name="membro">
+        <column name="MEMBRO"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

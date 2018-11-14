@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="index.xhtml" x="352" y="6" zoom="true"/>
+        <Node id="sistema/visitantes.xhtml" x="20" y="221" zoom="true"/>
+        <Node id="sistema/relatorioBalancete.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="sistema/relatorioMembro.xhtml" x="644" y="593" zoom="true"/>
+        <Node id="sistema/principal.xhtml" x="317" y="108" zoom="true"/>
+        <Node id="sistema/relatorioDizimista.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="template/template.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="sistema/usuarios.xhtml" x="20" y="415" zoom="true"/>
+        <Node id="sistema/relatorioVisitante.xhtml" x="640" y="414" zoom="true"/>
+        <Node id="sistema/membros.xhtml" x="5" y="593" zoom="true"/>
+        <Node id="sistema/saidas.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="sistema/entradas.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="sistema/relatorioAniversariantes.xhtml" x="626" y="211" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

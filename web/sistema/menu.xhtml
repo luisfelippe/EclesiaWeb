@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--<?xml version='1.0' encoding='ISO-8859-1' ?>-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view>
+        <p:menubar autoDisplay="false" style="margin: 10px 0px 0px 10px; width: fit-content; display: inline-block; float: right; border: 0px;">
+            <p:submenu label="Secretaria" icon="ui-icon-home">                                                                   
+                <p:submenu label="Novo" icon="ui-icon-plus">
+                    <p:menuitem value="Nova Pessoa" url="membros.xhtml" icon="ui-icon-person"/>   
+                    <p:separator/>                    
+                    <p:menuitem value="Ministério" icon="ui-icon-tag" onclick="PF('dlgNovoMinisterio').show()"/> 
+                    <p:menuitem value="Cargo" icon="ui-icon-tag" onclick="PF('dlgNovoCargo').show()" />                                                             
+                    <p:separator/>
+                    <p:menuitem value="Profissão" url="index.xhtml" icon="ui-icon-suitcase" /> 
+                    <p:separator/>
+                    <p:menuitem value="País" url="index.xhtml" icon="ui-icon-flag" /> 
+                    <p:menuitem value="Estado" url="index.xhtml" icon="ui-icon-flag" /> 
+                    <p:menuitem value="Cidade" url="index.xhtml" icon="ui-icon-flag" /> 
+                    <p:menuitem value="Bairro" url="index.xhtml" icon="ui-icon-flag" /> 
+                </p:submenu>            
+                <p:separator/>
+                <p:submenu label="Relatórios" icon="ui-icon-calculator">
+                    <p:menuitem value="Aniversariantes" url="relatorioAniversariantes.xhtml" icon="ui-icon-calculator"/>   
+                </p:submenu>
+                <p:separator/>
+                <p:menuitem value="Agenda" url="index.xhtml" icon="ui-icon-calendar" /> 
+            </p:submenu>
+            <p:submenu label="Financeiro" icon="ui-icon-star">
+                <p:submenu label="Novo" icon="ui-icon-plus">
+                    <p:menuitem value="Lançamento" url="lancamentos.xhtml" icon="ui-icon-star"/> 
+                    <p:separator/>
+                    <p:menuitem value="Tipo Entrada" icon="ui-icon-tag" onclick="PF('dlgNovoTipoEntrada').show()"/>    
+                    <p:menuitem value="Tipo Saída" icon="ui-icon-tag" onclick="PF('dlgNovoTipoSaida').show()"/>    
+                </p:submenu>
+                <p:submenu label="Relatórios" icon="ui-icon-calculator">
+                    <p:menuitem value="Dizimistas" url="relatorioDizimista.xhtml" icon="ui-icon-calculator"/>    
+                    <p:menuitem value="Balancete" url="relatorioBalancete.xhtml" icon="ui-icon-calculator"/>    
+                </p:submenu>
+            </p:submenu>
+            <p:submenu label="Patrimônio" icon="ui-icon-gear">
+                
+            </p:submenu>
+            <p:submenu label="EBD" icon="ui-icon-bookmark">
+                <p:submenu label="Novo" icon="ui-icon-plus">
+                    <p:menuitem value="Classe" url="index.xhtml" icon="ui-icon-bookmark"/>    
+                </p:submenu>
+            </p:submenu>
+            <p:submenu label="Configurações" icon="ui-icon-wrench">  
+                <p:menuitem value="Igreja" url="usuarios.xhtml" icon="ui-icon-person"/>  
+                <p:menuitem value="Usuários" url="usuarios.xhtml" icon="ui-icon-person"/>  
+                <p:menuitem value="Envio de e-mail" url="index.xhtml" icon="ui-icon-mail-closed"/>  
+            </p:submenu> 
+        </p:menubar>
+        <p:dialog id="dlgNovoMinisterio" widgetVar="dlgNovoMinisterio" header="Cadastro de Ministério" modal="true" closable="false" minimizable="false" position="center top">
+            <p:fieldset>
+                <h:panelGrid id="pgCadMin" columns="2">
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescMin" value="#{principalBean.ministerio.descricao}"/>                
+                </h:panelGrid>
+                <h:panelGroup layout="block" style="text-align: center;">
+                    <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarMinisterio()}" process="@this,itDescMin" update="pgListMin pgCadMin"/>
+                    <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparMinisterio()}" process="@this" update="pgCadMin" oncomplete="PF('dlgNovoMinisterio').hide()"/>
+                </h:panelGroup>
+            </p:fieldset>
+            <h:panelGroup layout="block" id="pgListMin" style="width: fit-content;">
+                <p:dataTable 
+                    value="#{principalBean.listaMinisterios}" 
+                    var="m" 
+                    rendered="#{principalBean.listaMinisterios.size() gt 0}" 
+                    style="width: 300px; margin-top: 10px;"
+                    rows="10"
+                    paginator="true"
+                    paginatorAlwaysVisible="false">
+                    <p:column headerText="Ministério">
+                        <h:outputText value="#{m.descricao}"/>
+                    </p:column>
+                    <p:column style="width: 30px;">
+                        <p:commandButton action="#{principalBean.setMinisterio(m)}" icon="ui-icon-pencil" title="Editar Ministério" process="@this" update=":frmMenu:pgCadMin"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </p:dialog>
+        <p:dialog id="dlgNovoCargo" widgetVar="dlgNovoCargo" header="Cadastro de Cargo" modal="true" closable="false" minimizable="false" position="center top">
+            <p:fieldset>
+                <h:panelGrid id="pgCadCargo" columns="2">
+                    <h:outputLabel value="Ministério: " styleClass="label" />
+                    <p:selectOneMenu id="cbMinCargo" value="#{principalBean.idMinCargoSel}" style="width: 175px;">
+                        <f:selectItems value="#{principalBean.listaMinisterios}" var="min" itemLabel="#{min.descricao}" itemValue="#{min.id}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescCargo" value="#{principalBean.cargo.descricao}"/>                       
+                </h:panelGrid>
+                <h:panelGroup layout="block" style="text-align: center;">
+                    <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarCargo()}" process="@this,cbMinCargo,itDescCargo" update="pgListCargo pgCadCargo"/>
+                    <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparCargo()}" process="@this" update="pgCadCargo" oncomplete="PF('dlgNovoCargo').hide()"/>
+                </h:panelGroup>
+            </p:fieldset>
+            <h:panelGroup layout="block" id="pgListCargo" style="width: fit-content;">
+                <p:dataTable 
+                    value="#{principalBean.listaCargo}" 
+                    var="c" 
+                    rendered="#{principalBean.listaCargo.size() gt 0}" 
+                    style="width: 300px; margin-top: 10px;"
+                    rows="10"
+                    paginator="true"
+                    paginatorAlwaysVisible="false">
+                    <p:column headerText="Ministério">
+                        <h:outputText value="#{c.ministerio.descricao}"/>
+                    </p:column>
+                    <p:column headerText="Cargo" style="width: 80px;">
+                        <h:outputText value="#{c.descricao}"/>
+                    </p:column>
+                    <p:column style="width: 30px;">
+                        <p:commandButton action="#{principalBean.setCargo(c)}" icon="ui-icon-pencil" title="Editar Cargo" process="@this" update=":frmMenu:pgCadCargo"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </p:dialog>
+        <p:dialog id="dlgNovoTipoEntrada" widgetVar="dlgNovoTipoEntrada" header="Cadastro de Tipo de Entrada" modal="true" closable="false" minimizable="false" position="center top">
+            <p:fieldset>
+                <h:panelGrid id="pgCadTipEnt" columns="2">
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescTipEnt" value="#{principalBean.tipoEntrada.descricao}"/>                
+                </h:panelGrid>
+                <h:panelGroup layout="block" style="text-align: center;">
+                    <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarTipoEntrada()}" process="@this,itDescTipEnt" update="pgListTipEnt pgCadTipEnt"/>
+                    <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparTipoEntrada()}" process="@this" update="pgCadTipEnt" oncomplete="PF('dlgNovoTipoEntrada').hide()"/>
+                </h:panelGroup>
+            </p:fieldset>
+            <h:panelGroup layout="block" id="pgListTipEnt" style="width: fit-content;">
+                <p:dataTable 
+                    value="#{principalBean.listaTipoEntrada}" 
+                    var="m" 
+                    rendered="#{principalBean.listaTipoEntrada.size() gt 0}" 
+                    style="width: 300px; margin-top: 10px;"
+                    rows="10"
+                    paginator="true"
+                    paginatorAlwaysVisible="false">
+                    <p:column headerText="Tipo de Entrada">
+                        <h:outputText value="#{m.descricao}"/>
+                    </p:column>
+                    <p:column style="width: 30px;">
+                        <p:commandButton action="#{principalBean.setTipoEntrada(m)}" icon="ui-icon-pencil" title="Editar Tipo de Entrada" process="@this" update=":frmMenu:pgCadTipEnt"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </p:dialog>
+        <p:dialog id="dlgNovoTipoSaida" widgetVar="dlgNovoTipoSaida" header="Cadastro de Tipo de Saída" modal="true" closable="false" minimizable="false" position="center top">
+            <p:fieldset>
+                <h:panelGrid id="pgCadTipSai" columns="2">
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescTipSai" value="#{principalBean.tipoSaida.descricao}"/>                
+                </h:panelGrid>
+                <h:panelGroup layout="block" style="text-align: center;">
+                    <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarTipoSaida()}" process="@this,itDescTipSai" update="pgListTipSai pgCadTipSai"/>
+                    <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparTipoSaida()}" process="@this" update="pgCadTipSai" oncomplete="PF('dlgNovoTipoSaida').hide()"/>
+                </h:panelGroup>
+            </p:fieldset>
+            <h:panelGroup layout="block" id="pgListTipSai" style="width: fit-content;">
+                <p:dataTable 
+                    value="#{principalBean.listaTipoSaida}" 
+                    var="m" 
+                    rendered="#{principalBean.listaTipoSaida.size() gt 0}" 
+                    style="width: 300px; margin-top: 10px;"
+                    rows="10"
+                    paginator="true"
+                    paginatorAlwaysVisible="false">
+                    <p:column headerText="Tipo de Saída">
+                        <h:outputText value="#{m.descricao}"/>
+                    </p:column>
+                    <p:column style="width: 30px;">
+                        <p:commandButton action="#{principalBean.setTipoEntrada(m)}" icon="ui-icon-pencil" title="Editar Tipo de Saída" process="@this" update=":frmMenu:pgCadTipSai"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
+        </p:dialog>
+    </f:view>
+</html>
+

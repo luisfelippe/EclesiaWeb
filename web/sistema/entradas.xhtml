@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:view>                    
+        <h:panelGrid cellpadding="0" cellspacing="0" class="valores">
+            <h:form id="form1">
+                <h:panelGrid columns="3" cellpadding="0" cellspacing="5" class="valores" columnClasses="col1">
+                    <h:outputLabel value="Cód Membro:"/>
+                    <p:inputText value="#{entradaBean.membro.id}">
+                        <f:convertNumber />
+                    </p:inputText>
+                    <p:commandButton value="Buscar" action="#{entradaBean.buscaMembro()}" ajax="false"/>
+                </h:panelGrid>
+            </h:form>
+            <h:outputLabel value="Nome: #{entradaBean.membro.nome}" style="margin-left: 5px;" rendered="#{entradaBean.membro.id > 0}"/>
+            <!--<h:outputText value="Em caso de oferta deixar o não informar membro." rendered="#{entradaBean.membro.id == 0}" style="margin-left: 5px; color: red; font-weight: bold;"/>-->
+            <h:form id="form"> 
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="5" class="valores" columnClasses="col1">
+                    <p:outputLabel value="Tipo:" for="tipo"/>
+                    <p:selectOneMenu id="tipo" value="#{entradaBean.idTipo}" effect="fade" style="width: 158px;" >  
+                        <f:selectItem itemLabel="Selecione um" itemValue="" />  
+                        <f:selectItems value="#{entradaBean.tipos}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.id}"/>  
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Valor:"/>
+                    <p:inputText value="#{entradaBean.entrada.valor}" />
+
+                    <h:outputLabel value="Data:"/>
+                    <p:calendar id="cal" navigator="true" yearRange="c-80" value="#{entradaBean.entrada.data}" pattern="dd/MM/yyyy" locale="pt_BR" timeZone="America/Sao_Paulo" />
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="0" cellspacing="5">
+                    <p:commandButton value="Salvar" ajax="false" action="#{entradaBean.addEntrada()}"/>
+                    <p:commandButton value="Limpar" ajax="false" action="#{entradaBean.limpar()}" />
+                    <p:commandButton value="Cancelar" ajax="false" action="#{entradaBean.cancelar()}" immediate="true"/>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGrid>                    
+    </f:view>                  
+</html>

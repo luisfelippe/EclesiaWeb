@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding="UTF-8" ?>
+<!--<?xml version='1.0' encoding="ISO-8859-1" ?>-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html" encoding="ISO-8859-1">
+        <h:head>
+            <f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+            </f:facet>
+            <title>EclesiaWeb</title>
+            <h:outputStylesheet library="css" name="css.css" />
+            <h:outputStylesheet library="algaworks" name="styles/custom.css" />
+            <h:outputStylesheet library="algaworks" name="styles/layout.css" />
+            <h:outputStylesheet library="algaworks" name="styles/components.css" />
+
+            <h:outputScript target="body" library="primefaces" name="jquery/jquery.js" />
+            <h:outputScript target="body" library="algaworks" name="javascripts/app.js" />
+            
+            <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light|Gloria+Hallelujah' rel='stylesheet' type='text/css'/>
+            
+            <ui:insert name="head"/>
+            <ui:insert name="js"/>
+            <h:outputScript library="js" name="locale-primefaces.js" />
+        </h:head>        
+        <h:body >
+            <header class="aw-topbar">
+                <h:panelGroup layout="block" style="width: fit-content; display: inline;">
+                    <h:outputText value="EclesiaWeb" style="margin-left:10px; font-size: 25px; font-family: 'Gloria Hallelujah', cursive;"/>
+                    <p:graphicImage value="/images/logo3.png" title="EclesiaWeb - Gerenciamento Eclesiástico" height="50" style="float: left !important;"/>
+<!--                    <a href="#" class="aw-toggle  js-toggle"><i class="fa  fa-bars"></i></a>-->
+                </h:panelGroup>		                
+            </header>
+
+<!--            <aside class="aw-sidebar  js-sidebar">
+                <ui:include src="Menu.xhtml" />
+            </aside>-->
+            
+<!--            <section class="aw-content  js-content">-->
+                <h:form id="corpo" style="margin-top: 80px;">
+                    <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                    <ui:insert name="content" />
+                </h:form>
+                
+<!--                <h:panelGroup layout="block" style="bottom: 0px; position: fixed !important;">
+                    <h:outputText value="#{principalBean.usuario.nome}" style="font-weight: bold; font-family: 'Shadows Into Light', cursive;"/>
+                    <p:graphicImage value="/images/logoUCL.png" title="UCL" height="20" style="float: right; right: 10px; position: fixed;"/>
+                </h:panelGroup>-->
+                    
+<!--            </section>-->
+
+            
+        </h:body>
+    </f:view>
+</html>

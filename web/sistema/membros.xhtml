@@ -1,0 +1,690 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">        
+        <ui:define name="topo">
+            <p:breadCrumb style="margin-bottom: 10px;">
+                <p:menuitem value="Principal" action="principal.xhtml"/>
+                <p:menuitem value="Secretaria" action="membros.xhtml" />
+            </p:breadCrumb>  
+        </ui:define>
+        <ui:define name="content">
+            <h1 class="aw-page-title">Secretaria</h1>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton value="Novo" icon="ui-icon-plusthick" action="#{membroBean.novoAction()}" process="@this" update=":corpo"/>
+                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{membroBean.salvarAction()}" process="@this" update=":corpo" rendered="#{membroBean.membro ne null}"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{membroBean.cancelar()}" process="@this" update=":corpo" rendered="#{membroBean.membro ne null}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+            <h:panelGroup layout="block" id="pgDadosMembro">
+                <p:panel id="panDadosMembro" header="#{(membroBean.membro ne null and membroBean.membro.id gt 0) ? 'Edição' : 'Cadastro'} de Membro" rendered="#{membroBean.membro.id ge 0}">
+                    <p:tabView id="formMembro" >                     
+                        <p:tab title="Dados Pessoais" id="dadosPes">  
+                            <p:panelGrid id="pgDadosPes" columns="2" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder">
+                                <p:panelGrid id="fotoContent" columns="1" layout="grid" columnClasses="ui-grid-col-12" style="text-align: center !important; ">
+                                    <p:dialog id="dlgFotoAmpliada" widgetVar="dlgFotoAmpliada" header="Foto" modal="true" responsive="true" resizable="false" hideEffect="explode">
+                                        <center>
+                                            <p:graphicImage 
+                                                id="fotoAmpliada"
+                                                url="img-pessoa?cam=#{membroBean.fotoPessoa.caminho}" 
+                                                style="max-width: 300px !important;"
+                                                />
+                                        </center>
+                                    </p:dialog>
+
+                                    <p:dialog 
+                                        id="dlgFotoInsert" 
+                                        widgetVar="dlgFotoInsert" 
+                                        header="Inserir Foto" 
+                                        modal="true" 
+                                        responsive="true"
+                                        resizable="false" 
+                                        hideEffect="explode"
+                                        dynamic="true"
+                                        style="max-width: 300px;"
+                                        >
+                                        <p:fileUpload 
+                                            label="Buscar"
+                                            cancelLabel="Cancelar"
+                                            fileUploadListener="#{membroBean.handleFileUploadFoto}"
+                                            multiple="true" 
+                                            fileLimit="20" 
+                                            update="fotoPessoa fotoAmpliada fotoNavTollbar panelFoto" 
+                                            dragDropSupport="true"
+                                            previewWidth="40"
+                                            style="max-width: 300px;"
+                                            allowTypes="/(\.|\/)(jpg)$/" />
+                                    </p:dialog>
+
+                                    <h:panelGroup layout="block">
+                                        <p:commandLink process="@this" onclick="PF('dlgFotoAmpliada').show();" >
+                                            <p:graphicImage 
+                                                id="fotoPessoa"
+                                                url="img-pessoa?cam=#{membroBean.fotoPessoa.caminho}" 
+                                                style="height: 267px; width: 200px; border: 1px solid #999;" 
+                                                cache="false"/>
+                                        </p:commandLink>
+
+                                        <p:toolbar id="fotoNavTollbar" style="font-size: 12px; margin-top:0px;" >
+                                            <f:facet name="left">
+                                                <p:commandButton title="Primeira"  process="@this" action="#{membroBean.firstAction()}" update="fotoNavTollbar fotoPessoa fotoAmpliada panelFoto" icon="ui-icon-arrowthickstop-1-w" disabled="#{membroBean.membro.id eq 0 or membroBean.indAtualFoto eq 0}"/>
+                                                <p:commandButton title="Anterior" process="@this" action="#{membroBean.previusAction()}" update="fotoNavTollbar fotoPessoa fotoAmpliada panelFoto" icon="ui-icon-arrowthick-1-w" disabled="#{membroBean.membro.id eq 0 or membroBean.indAtualFoto eq 0}"/>
+                                                <p:commandButton title="Próxima" process="@this" action="#{membroBean.nextAction()}" update="fotoNavTollbar fotoPessoa fotoAmpliada panelFoto" icon="ui-icon-arrowthick-1-e" disabled="#{membroBean.membro.id eq 0 or (membroBean.indAtualFoto + 1 eq membroBean.membro.fotos.size())}"/>
+                                                <p:commandButton title="Última" process="@this" action="#{membroBean.lastAction()}" update="fotoNavTollbar fotoPessoa fotoAmpliada panelFoto" icon="ui-icon-arrowthickstop-1-e" disabled="#{membroBean.membro.id eq 0 or (membroBean.indAtualFoto + 1 eq membroBean.membro.fotos.size())}"/>
+                                                <p:commandButton type="button" title="Adicionar" icon="ui-icon-plus" disabled="#{membroBean.membro.id eq 0}" onclick="PF('dlgFotoInsert').show();"/>
+                                                <p:commandButton title="Remover" icon="ui-icon-minus" process="@this" action="#{membroBean.excluirFoto()}" disabled="#{membroBean.membro.id eq 0}" update="fotoPessoa fotoContent panelFoto"/>
+                                                <p:commandButton title="Trazer pra frente" process="@this" action="#{membroBean.defineFotoPadrao()}" icon="ui-icon-check" disabled="#{membroBean.membro.id eq 0}"/>
+                                            </f:facet>                                        
+                                        </p:toolbar>                                        
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" id="panelFoto">
+                                        <h:outputText value="#{membroBean.indAtualFoto + 1} de #{membroBean.membro.fotos.size()}" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <h:panelGroup layout="block" styleClass="ui-fluid">
+                                    
+                                    <p:selectOneRadio id="sorFaixaEtaria" value="#{membroBean.membro.faixaEtaria}" layout="custom">
+                                        <f:selectItems value="#{membroBean.faixasEtarias}" var="f" itemLabel="#{f.descricao}" itemValue="#{f}"/>
+                                    </p:selectOneRadio>
+                                    
+                                    <p:panelGrid columns="3" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-8" styleClass="panelgrid-noborder">
+                                        <p:selectBooleanCheckbox id="ckbFalecido" value="#{membroBean.membro.falecido}" itemLabel="Falecido" styleClass="label">
+                                            <p:ajax process="@this" partialSubmit="true" global="false" update="ckbInativo" />
+                                        </p:selectBooleanCheckbox>
+                                        <p:selectBooleanCheckbox id="ckbInativo" value="#{membroBean.membro.inativo}" itemLabel="Inativo" styleClass="label"/>
+                                        <p:selectBooleanCheckbox id="ckbDesmp" value="#{membroBean.membro.desempregado}" itemLabel="Desempregado" styleClass="label"/>     
+                                    </p:panelGrid>
+                                    
+                                    <p:panelGrid columns="3" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-8" styleClass="panelgrid-noborder" style="margin-top: 20px;">
+                                        <h:panelGroup layout="block">
+                                            <p:radioButton id="opt1" for="sorFaixaEtaria" itemIndex="0" />
+                                            <p:outputLabel for="opt1" value="Adulto" styleClass="label" style="margin-left: 5px;"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block">
+                                            <p:radioButton id="opt2" for="sorFaixaEtaria" itemIndex="1" />
+                                            <p:outputLabel for="opt2" value="Criança" styleClass="label" style="margin-left: 5px;"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup layout="block">
+                                            <p:radioButton id="opt3" for="sorFaixaEtaria" itemIndex="2" />
+                                            <p:outputLabel for="opt3" value="Jovem" styleClass="label" style="margin-left: 5px;"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    
+                                    <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="panelgrid-noborder" >
+                                        <h:outputLabel value="Nome:" styleClass="label"/>
+                                        <p:inputText value="#{membroBean.membro.nome}" required="true"/>
+                                    </p:panelGrid>                        
+                                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" styleClass="panelgrid-noborder">
+                                        <h:outputText value="Sexo: " styleClass="label"/> 
+                                        <p:selectOneRadio id="options" value="#{membroBean.membro.masculino}" required="true">  
+                                            <f:selectItem itemLabel="Masculino" itemValue="M" />  
+                                            <f:selectItem itemLabel="Feminino" itemValue="F" />  
+                                        </p:selectOneRadio>
+                                        <h:outputLabel value="Dt. Nasc.: " styleClass="label"/>
+                                        <p:calendar id="cal" navigator="true" yearRange="c-80:c+0" value="#{membroBean.membro.dataNasc}" pattern="dd/MM/yyyy" locale="pt_BR" required="true"/>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" styleClass="panelgrid-noborder">
+                                        <h:outputLabel value="RG: " styleClass="label"/>
+                                        <p:inputText value="#{membroBean.membro.RG}" />
+
+                                        <h:outputLabel value="CPF: " styleClass="label"/>
+                                        <p:inputMask value="#{membroBean.membro.CPF}"  mask="999.999.999-99" required="true"/>                        
+
+                                        <h:outputLabel value="Estado Civil: " styleClass="label"/>
+                                        <p:selectOneMenu value="#{membroBean.estadoCivil}" >  
+                                            <f:selectItem itemLabel="Selecione um" itemValue="" />  
+                                            <f:selectItems value="#{membroBean.estadosCivis}" var="estado" itemLabel="#{estado.descricao}" itemValue="#{estado.id}"/>  
+                                        </p:selectOneMenu> 
+
+                                        <h:outputLabel value="Escolaridade: " styleClass="label"/>
+                                        <p:selectOneMenu value="#{membroBean.escolaridade}" >  
+                                            <f:selectItem itemLabel="Selecione um" itemValue="" />  
+                                            <f:selectItems value="#{membroBean.listaEscolaridade}" var="grau" itemLabel="#{grau.descricao}" itemValue="#{grau.id}"/>  
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="panelgrid-noborder">
+                                        <h:outputLabel value="Curso Grau: " styleClass="label" />
+                                        <p:inputText value="#{membroBean.membro.descCursoEscolaridade}" />
+
+                                        <h:outputLabel value="E-mail: " styleClass="label" />
+                                        <p:inputText value="#{membroBean.membro.email}" />
+                                    </p:panelGrid>
+                                        <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" styleClass="panelgrid-noborder">
+                                            <p:outputLabel value="Dt. Batismo" styleClass="label"/>
+                                            <p:calendar id="calDtBat" navigator="true" yearRange="c-80:c+0" value="#{membroBean.membro.dataBatismo}" pattern="dd/MM/yyyy" locale="pt_BR" />
+                                            <p:outputLabel value="Dt. Admissão" styleClass="label"/>
+                                            <p:calendar id="calDtAdm" navigator="true" yearRange="c-80:c+0" value="#{membroBean.membro.dataAdmissao}" pattern="dd/MM/yyyy" locale="pt_BR" />
+                                        </p:panelGrid>
+                                    <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="panelgrid-noborder">
+                                        <p:outputLabel value="Membro por" styleClass="label"/>
+                                        <p:selectOneMenu value="#{membroBean.membro.tipoAdmissao}" >
+                                            <f:selectItem itemLabel="Selecione um" itemValue=""/>
+                                            <f:selectItems value="#{membroBean.tiposAdmissao}" var="a" itemLabel="#{a.descricao}" itemValue="#{a}" />
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                </h:panelGroup>
+                            </p:panelGrid>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-plusthick" action="#{membroBean.novoAction()}" process="@this" update=":corpo"/>
+                                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{membroBean.salvarAction()}" process="@this,pgDadosPes" update=":corpo"/>
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{membroBean.cancelar()}" process="@this" update=":corpo"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </p:tab>
+                        <p:tab title="Dados Familiares" id="dadosFam" disabled="#{membroBean.membro.id eq 0}"> 
+                            <h:panelGroup layout="block" styleClass="ui-fluid">
+                                <p:panelGrid id="parente" layout="grid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder">
+                                    <p:outputLabel value="Pacote: " for="pkt" styleClass="label"/>
+                                    <p:selectOneMenu id="pkt" value="#{membroBean.idMembroParente}" >
+                                        <f:selectItem itemLabel="" itemValue="0" /> 
+                                        <f:selectItems var="membro" value="#{membroBean.getMembrosPacote()}" itemLabel="#{membro.nome}" itemValue="#{membro.id}"/>
+                                        <p:ajax listener="#{membroBean.atualizaParente()}" update="parente" event="change" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="Nome: " for="nomeParente" styleClass="label"/>                                        
+                                    <p:inputText id="nomeParente" value="#{membroBean.parente.nome}" />
+
+                                    <p:outputLabel value="Parentesco: " for="parentescoParente" styleClass="label"/> 
+                                    <p:panelGrid layout="grid" columns="5" columnClasses="ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="panelgrid-noborder panelgrid-nopadding">    
+                                        <p:selectOneMenu id="parentescoParente" value="#{membroBean.parentescoParenteSel}" >  
+                                            <f:selectItem itemLabel="Selecione uma" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.parentescos}" var="parentesco" itemLabel="#{parentesco.descricao}" itemValue="#{parentesco.id}"/>  
+                                        </p:selectOneMenu> 
+
+                                        <p:outputLabel value="Dt. Nasc.: " for="cal2" styleClass="label label-margin"/>                                                                         
+                                        <p:calendar id="cal2" navigator="true" yearRange="c-80:c+0" value="#{membroBean.parente.dtNasc}" pattern="dd/MM/yyyy" locale="pt_BR" />
+
+                                        <p:outputLabel value="Sexo:" for="sexoParente" styleClass="label label-margin"/> 
+                                        <p:selectOneRadio id="sexoParente" value="#{membroBean.parente.masculino}">  
+                                            <f:selectItem itemLabel="Masc." itemValue="M" />  
+                                            <f:selectItem itemLabel="Fem." itemValue="F" />  
+                                        </p:selectOneRadio>
+                                    </p:panelGrid>
+
+                                    <p:outputLabel value="Profissão: " for="profissaoParente" styleClass="label"/> 
+                                    <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding">
+                                        <p:selectOneMenu id="profissaoParente" value="#{membroBean.profissaoParenteSel}" >  
+                                            <f:selectItem itemLabel="Selecione uma" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.profissoes}" var="profissao" itemLabel="#{profissao.descricao}" itemValue="#{profissao.id}"/>  
+                                        </p:selectOneMenu> 
+                                        <p:commandButton icon="ui-icon-plus" value="Add" title="Adicionar" action="#{principalBean.limparProfissao()}" process="@this" oncomplete="PF('dlgNewProfissao').show();"/>
+                                    </p:panelGrid>                                
+                                </p:panelGrid>
+                            </h:panelGroup>
+                            <p:toolbar style="margin-top: 20px;" >
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-plus" process="@this" actionListener="#{membroBean.limparParenteAction()}" update="parente"/>
+                                    <p:commandButton value="Adicionar" icon="ui-icon-disk" action="#{membroBean.salvarParenteAction()}" process="@this,parente" update=":corpo:formMembro:pgDtParentes parente"/>                                    
+                                </p:toolbarGroup>
+                            </p:toolbar>
+
+                            <h:panelGroup id="pgDtParentes" layout="block">
+                                <p:dataTable 
+                                    id="dtDadosFamiliares" 
+                                    reflow="true"
+                                    paginator="true" 
+                                    paginatorAlwaysVisible="false"
+                                    rows="20"                             
+                                    value="#{membroBean.membro.parentes}" 
+                                    var="parente" 
+                                    rendered="#{membroBean.membro.parentes.size() > 0}"
+                                    style="margin-top: 20px;">
+                                    <p:column headerText="Nome" sortBy="#{parente.nome}">
+                                        <h:outputText value="#{parente.nome}" />
+                                    </p:column>
+                                    <p:column 
+                                        headerText="Parentesco" 
+                                        sortBy="#{parente.parentesco.descricao}"
+                                        styleClass="colOpt3">
+                                        <h:outputText value="#{parente.parentesco.descricao}" />
+                                    </p:column>
+                                    <p:column styleClass="colOpt1">
+                                        <p:commandButton icon="ui-icon-trash" title="Excluir Parente" action="#{membroBean.excluir(parente)}" process="@this" update=":corpo:formMembro:pgDtParentes :corpo:formMembro:parente"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+                        </p:tab>
+                        <p:tab title="Dados Profissionais" id="dadosPro" disabled="#{membroBean.membro.id eq 0}">
+                            <h:panelGroup layout="block" styleClass="ui-fluid">
+                                <p:panelGrid id="profissao" layout="grid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder">                                                                     
+                                    <h:outputLabel value="Profissão: " styleClass="label"/>
+                                    <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding">
+                                        <p:selectOneMenu id="cbProfissao" value="#{membroBean.profissao}" >  
+                                            <f:selectItem itemLabel="Selecione uma" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.profissoes}" var="profissao" itemLabel="#{profissao.descricao}" itemValue="#{profissao.id}"/>  
+                                        </p:selectOneMenu> 
+                                        <p:commandButton icon="ui-icon-plus" value="Add" title="Adicionar" action="#{principalBean.limparProfissao()}" process="@this" oncomplete="PF('dlgNewProfissao').show();"/>
+                                    </p:panelGrid>
+
+                                    <h:outputLabel value="Empresa: " styleClass="label" />
+                                    <p:inputText value="#{membroBean.dadosProfissionais.nome}" />
+
+                                    <h:outputLabel value="Endereço: " styleClass="label" />
+                                    <p:inputText value="#{membroBean.dadosProfissionais.endereco}" />
+
+                                    <h:outputLabel value="Nº: " styleClass="label" />
+                                    <p:panelGrid layout="grid" columns="5" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-4" styleClass="panelgrid-noborder panelgrid-nopadding">                                    
+                                        <p:spinner id="numero" value="#{membroBean.dadosProfissionais.numero}" size="8"/>
+
+                                        <h:outputLabel value="UF: " styleClass="label label-margin" />
+                                        <p:selectOneMenu value="#{membroBean.ufPro}" >  
+                                            <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.estados}" var="estado" itemLabel="#{estado.sigla}" itemValue="#{estado.id}"/>  
+                                            <p:ajax process="@this" listener="#{membroBean.atualizaListaCidades()}" update="cbCidadePro" global="false"/>
+                                        </p:selectOneMenu> 
+
+                                        <h:outputLabel value="Cidade: " styleClass="label label-margin" />
+                                        <p:selectOneMenu id="cbCidadePro" value="#{membroBean.municipioPro}" >  
+                                            <f:selectItem itemLabel="Selecione uma" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.cidades}" var="municipio" itemLabel="#{municipio.nome}" itemValue="#{municipio.id}"/>  
+                                            <p:ajax process="@this" listener="#{membroBean.atualizaListaBairros()}" update="cbBairrosPro" global="false"/>
+                                        </p:selectOneMenu> 
+                                    </p:panelGrid>
+
+                                    <h:outputLabel value="Bairro: " styleClass="label" />
+                                    <p:panelGrid layout="grid" columns="3" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-4" styleClass="panelgrid-noborder panelgrid-nopadding" > 
+                                        <p:selectOneMenu id="cbBairrosPro" value="#{membroBean.bairroPro}">  
+                                            <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.bairros}" var="bairro" itemLabel="#{bairro.nome}" itemValue="#{bairro.id}"/>  
+                                        </p:selectOneMenu>
+
+                                        <h:outputLabel value="Cep: " styleClass="label label-margin" />
+                                        <p:inputMask value="#{membroBean.dadosProfissionais.cep}"  mask="99.999-999" />
+                                    </p:panelGrid>
+                                </p:panelGrid>
+                            </h:panelGroup>
+                            <p:toolbar style="margin-top: 20px;" >
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" actionListener="#{membroBean.limparProfissaoAction()}" update="profissao"/>
+                                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{membroBean.salvarProfissaoAction()}" process="@form,profissao" update="profissao"/>                                    
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </p:tab>
+                        <p:tab title="Endereços" id="dadosEnd" disabled="#{membroBean.membro.id eq 0}">
+                            <h:panelGroup layout="block" styleClass="ui-fluid">
+                                <p:panelGrid id="enderecos" layout="grid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder"> 
+<!--                                    <h:outputLabel value="Tipo: " styleClass="label" />
+                                    <p:selectOneMenu value="" effect="fade" >  
+                                        <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                        <f:selectItems value="" var="tpEnd" itemLabel="" itemValue=""/>  
+                                    </p:selectOneMenu> -->
+
+                                    <h:outputLabel value="Endereço: " styleClass="label" />
+                                    <p:inputText value="#{membroBean.endereco.logradouro}" />
+
+                                    <h:outputLabel value="Estado: " styleClass="label" />
+                                    <p:selectOneMenu value="#{membroBean.ufEnd}" >  
+                                        <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                        <f:selectItems value="#{membroBean.estados}" var="estado" itemLabel="#{estado.nome}" itemValue="#{estado.id}"/>  
+                                    </p:selectOneMenu> 
+
+                                    <h:outputLabel value="Cidade: " styleClass="label" />
+                                    <p:selectOneMenu value="#{membroBean.municipioEnd}" >  
+                                        <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                        <f:selectItems value="#{membroBean.cidades}" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade.id}"/>  
+                                    </p:selectOneMenu> 
+
+                                    <h:outputLabel value="Bairro: " styleClass="label" />
+                                    <p:selectOneMenu value="#{membroBean.bairroEnd}" >  
+                                        <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                        <f:selectItems value="#{membroBean.bairros}" var="bairro" itemLabel="#{bairro.nome}" itemValue="#{bairro.id}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="CEP: " styleClass="label" />
+                                    <p:inputMask mask="99.999-999" value="#{membroBean.endereco.cep}" />
+                                </p:panelGrid>
+                            </h:panelGroup>
+                            <p:toolbar style="margin-top: 20px;" >
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-plus" process="@this" actionListener="#{membroBean.limparEnderecoAction()}"  update="enderecos"/>
+                                    <p:commandButton value="Adicionar" icon="ui-icon-disk" action="#{membroBean.salvarEnderecoAction()}" process="@this,enderecos" update=":corpo:formMembro:pgDtEnderecos  enderecos"/>                                
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <h:panelGroup id="pgDtEnderecos" layout="block" >
+                                <p:dataTable 
+                                    value="#{membroBean.membro.endereco}" 
+                                    var="end" 
+                                    reflow="true"
+                                    paginator="true" 
+                                    paginatorAlwaysVisible="false"
+                                    rows="20"  
+                                    style="margin-top: 20px;"
+                                    rendered="#{membroBean.membro.endereco.size() > 0}">
+                                    <p:column headerText="Endereco" sortBy="#{end.logradouro}">
+                                        <h:outputText value="#{end.endCompleto}" />
+                                    </p:column>    
+                                    <p:column styleClass="colOpt1">
+                                        <p:commandButton icon="ui-icon-trash" title="Excluir Endereço" action="#{membroBean.excluir(end)}" process="@this" update=":corpo:formMembro:pgDtEnderecos :corpo:formMembro:enderecos"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+                        </p:tab>
+                        <p:tab title="Telefones" id="dadosTel" disabled="#{membroBean.membro.id eq 0}">
+                            <h:panelGroup layout="block" styleClass="ui-fluid">
+                                <p:panelGrid id="telefones" layout="grid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder">
+                                    <p:outputLabel value="Tipo:" styleClass="label"/>
+<!--                                    <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-11, ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding">-->
+                                        <p:selectOneMenu value="#{membroBean.idTipoTelSel}" >  
+                                            <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                            <f:selectItems value="#{membroBean.listaTiposTel}" var="tTel" itemValue="#{tTel.id}" itemLabel="#{tTel.descricao}"/>
+                                            <p:ajax update="imNumero"/>
+                                        </p:selectOneMenu>
+<!--                                        <p:commandButton icon="ui-icon-plus" value="Adicionar" title="Adicionar"/>
+                                    </p:panelGrid>-->
+
+                                    <p:outputLabel value="Número:" styleClass="label"/>
+                                    <p:inputMask id="imNumero" mask="#{membroBean.telefone.tipo.mascara}" value="#{membroBean.telefone.numero}"/>
+                                </p:panelGrid>                                
+                            </h:panelGroup>
+                            <p:toolbar style="margin-top: 20px;" >
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-plus" process="@this" actionListener="#{membroBean.limparTelefoneAction()}" update="telefones"/>
+                                    <p:commandButton value="Adicionar" icon="ui-icon-disk" action="#{membroBean.salvarTelefoneAction()}" process="@this,telefones" update="telefones pgDtTelefones"/>                                    
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <h:panelGroup layout="block" id="pgDtTelefones">
+                                <p:dataTable 
+                                    id="dtTelefone"
+                                    value="#{membroBean.membro.telefone}" 
+                                    var="tel" 
+                                    reflow="true"
+                                    paginator="true" 
+                                    paginatorAlwaysVisible="false"
+                                    rows="20"       
+                                    style="margin-top: 20px;"
+                                    rendered="#{membroBean.membro.telefone.size() > 0}">
+                                    <p:column headerText="Telefone">
+                                        <h:outputText value="#{tel.numero}" />
+                                    </p:column>       
+<!--                                    <p:column headerText="Tipo" styleClass="colOpt3">
+                                        <h:outputText value="#{tel.tipo.descricao}"/>
+                                    </p:column>-->
+                                    <p:column styleClass="colOpt1">
+                                        <p:commandButton icon="ui-icon-trash" title="Excluir Telefone" action="#{membroBean.excluir(tel)}" process="@this" update=":corpo:formMembro:pgDtTelefones :corpo:formMembro:telefones"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+                        </p:tab>
+                        <p:tab title="Dados Ministeriais" id="dadosMin" disabled="#{membroBean.membro.id eq 0}">
+                            <h:panelGroup layout="block" styleClass="ui-fluid">
+                                <p:panelGrid id="dadosMinisteriais" layout="grid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" styleClass="panelgrid-noborder">
+                                    <p:outputLabel value="Dt. Inicial:" styleClass="label"/>
+                                    <p:calendar id="dtIni" navigator="true" yearRange="c-80:c+0" value="#{membroBean.dadosMinisteriais.dataInicial}" pattern="dd/MM/yyyy" locale="pt_BR" required="true"/>
+
+                                    <p:outputLabel value="Dt. Final:" styleClass="label"/>
+                                    <p:calendar id="dtFim" navigator="true" yearRange="c-80:c+0" value="#{membroBean.dadosMinisteriais.dataFinal}" pattern="dd/MM/yyyy" locale="pt_BR"/>
+
+                                    <p:outputLabel value="Ministério:" styleClass="label"/>
+                                    <p:panelGrid id="pgdMinisterioMemb" layout="grid" columns="2" columnClasses="ui-grid-col-11, ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding">
+                                        <p:selectOneMenu value="#{membroBean.idMinSel}" >
+                                            <f:selectItem itemLabel="Selecione um" itemValue="0" />
+                                            <f:selectItems value="#{membroBean.listaMinisterios}" var="m" itemLabel="#{m.descricao}" itemValue="#{m.id}"/>
+                                            <p:ajax listener="#{membroBean.atualizaListaCargo()}" process="@this" update="pgdCargoMemb" partialSubmit="true" global="false"/>
+                                        </p:selectOneMenu>
+                                        <p:commandButton icon="ui-icon-plus" value="Add" title="Adicionar" action="#{principalBean.limparMinisterio()}" process="@this" oncomplete="PF('dlgNovoMinisterio').show();"/>
+                                    </p:panelGrid>
+
+                                    <p:outputLabel value="Cargo:" styleClass="label"/>
+                                    <p:panelGrid id="pgdCargoMemb" layout="grid" columns="2" columnClasses="ui-grid-col-11, ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding">
+                                        <p:selectOneMenu value="#{membroBean.idCargoSel}" >
+                                            <f:selectItem itemLabel="Selecione um" itemValue="0" />
+                                            <f:selectItems value="#{membroBean.listaCargos}" var="c" itemLabel="#{c.descricao}" itemValue="#{c.id}"/>
+                                        </p:selectOneMenu>
+                                        <p:commandButton icon="ui-icon-plus" value="Add" title="Adicionar" action="#{principalBean.limparCargo()}" process="@this" oncomplete="PF('dlgNovoCargo').show();"/>
+                                    </p:panelGrid>
+
+                                    <p:outputLabel value="Obs:" styleClass="label"/>                                
+                                    <p:inputTextarea value="#{membroBean.dadosMinisteriais.obs}" rows="5" cols="50"/>
+                                </p:panelGrid>                                
+                            </h:panelGroup>
+                            <p:toolbar style="margin-top: 20px;" >
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-plus" process="@this" actionListener="#{membroBean.limparDadosMinisteriais()}" update="dadosMinisteriais"/>
+                                    <p:commandButton value="Adicionar" icon="ui-icon-disk" action="#{membroBean.salvarDadosMinisteriaisAction()}" process="@this,dadosMinisteriais" update="dadosMin"/>                                    
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable 
+                                value="#{membroBean.membro.dadosMinisteriais}" 
+                                var="dMin" 
+                                reflow="true"
+                                paginator="true" 
+                                paginatorAlwaysVisible="false"
+                                rows="20"   
+                                style="margin-top: 20px;"
+                                rendered="#{membroBean.membro.dadosMinisteriais.size() > 0}">
+                                <p:column headerText="Ministério">
+                                    <h:outputText value="#{dMin.cargo.ministerio.descricao}" />
+                                </p:column>       
+                                <p:column headerText="Cargo" styleClass="colOpt3">
+                                    <h:outputText value="#{dMin.cargo.descricao}" />
+                                </p:column>       
+                                <p:column headerText="Dt. Inicial" styleClass="colOpt2">
+                                    <h:outputText value="#{dMin.dataInicial}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Dt. Final" styleClass="colOpt2">
+                                    <h:outputText value="#{dMin.dataFinal}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Obs">
+                                    <h:outputText value="#{dMin.obs}"/>
+                                </p:column>
+                                <p:column styleClass="colOpt1">
+                                    <p:commandButton icon="ui-icon-pencil" title="Editar Dados Ministeriais" action="#{membroBean.setDadosMinisteriais(dMin)}" process="@this" update=":corpo:formMembro:dadosMinisteriais"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                </p:panel> 
+            </h:panelGroup>
+            
+            
+            <p:panel id="content" toggleable="true" collapsed="#{membroBean.membro ne null}" style="margin-top: 20px; margin-bottom: 40px;">
+                <f:facet name="header">
+                    Busca de Membros
+                </f:facet>      
+                <h:panelGroup layout="block" id="pgBuscaMembro" styleClass="ui-fluid">
+                    <p:panelGrid layout="grid" id="form" columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="panelgrid-noborder">
+                        <h:outputLabel value="Código: " styleClass="label"/>
+                        <p:spinner id="cod" value="#{relMembroBean.cod}">
+                            <p:ajax process="@this" partialSubmit="true" global="false"/>
+                        </p:spinner>
+
+                        <h:outputLabel value="Nome: " styleClass="label" />
+                        <p:inputText id="itBuscaNome" value="#{relMembroBean.nome}" >
+                            <p:ajax process="@this" partialSubmit="true" global="false"/>
+                        </p:inputText>
+
+                        <h:outputLabel value="CPF: " styleClass="label" />
+                        <p:inputMask id="imBuscaCPF" value="#{relMembroBean.cpf}"  mask="999.999.999-99" >
+                            <p:ajax process="@this" partialSubmit="true" global="false"/>
+                        </p:inputMask>
+
+                        <h:outputLabel value="Telefone: " styleClass="label" />
+                        <p:inputMask id="imBuscaTel" value="#{relMembroBean.telefone}"  mask="(99) 9999-9999" >  
+                            <p:ajax process="@this" partialSubmit="true" global="false"/>
+                        </p:inputMask>
+                        <h:outputLabel value="Nascido: " styleClass="label" />
+                        <p:panelGrid layout="grid" columns="3" columnClasses="ui-grid-col-5, ui-grid-col-2, ui-grid-col-5" styleClass="panelgrid-noborder panelgrid-nopadding">
+                            <p:calendar id="dtIniBusca" navigator="true" value="#{relMembroBean.dataIni}" pattern="dd/MMM" locale="pt_BR" lang="pt_BR">
+                                <p:ajax event="dateSelect" process="@this" partialSubmit="true" global="false" update="dtFimBusca"/>
+                            </p:calendar>
+                            <h:outputLabel value="à" styleClass="label label-margin" />
+                            <p:calendar id="dtFimBusca" navigator="true" value="#{relMembroBean.dataFim}" pattern="dd/MMM" mindate="#{relMembroBean.dataIni}" locale="pt_BR"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:panelGroup>
+                <p:toolbar style="margin-top: 20px;" >
+                    <p:toolbarGroup>
+                        <p:commandButton value="Buscar" icon="ui-icon-search" action="#{relMembroBean.buscarAction()}" process="@this,pgBuscaMembro" update="resultado"/>
+                        <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" action="#{relMembroBean.reset()}" update=":corpo" />                       
+                    </p:toolbarGroup>
+                </p:toolbar>
+                
+                <h:panelGroup layout="block" id="resultado">
+                    <p:dataTable 
+                        id="membros" 
+                        reflow="true"
+                        paginator="true" 
+                        paginatorAlwaysVisible="false"
+                        rows="20" 
+                        var="membro" 
+                        value="#{relMembroBean.lista}"  
+                        rowKey="#{membro.nome}" 
+                        style="margin-top: 20px;" 
+                        rendered="#{relMembroBean.lista.size() > 0}">
+                        <f:facet name="header">
+                            <h:outputText value="Resultado"/>
+                        </f:facet>
+
+                        <p:column sortBy="#{membro.id}" style="text-align: center;" styleClass="colOpt2">
+                            <f:facet name="header">
+                                <h:outputText value="Código" />
+                            </f:facet>
+                            <h:outputText value="#{membro.id}" />
+                        </p:column>
+                        <p:column sortBy="#{membro.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Nome" />
+                            </f:facet>
+                            <h:outputText value="#{membro.nome}" />
+                        </p:column>
+                        <p:column sortBy="#{membro.dataNasc}" rendered="#{relMembroBean.dataIni ne null or relMembroBean.dataFim ne null}">
+                            <f:facet name="header">
+                                <h:outputText value="Data Nascimento" />
+                            </f:facet>
+                            <h:outputText value="#{membro.dataNasc}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column styleClass="colOpt3">  
+                            <p:commandButton id="editButton" icon="ui-icon-pencil" title="Editar" action="#{membroBean.setMembro(membro)}" process="@this" update=":corpo"/>  
+                            <p:commandButton id="delButton" icon="ui-icon-trash" title="Excluir" action="#{relMembroBean.excluir(membro)}" process="@this" update=":corpo"/>              
+                            <p:commandButton id="pktButton" icon="ui-icon-arrowthickstop-1-s" title="Add Pkt" action="#{relMembroBean.addPktAction(membro)}" process="@this" update=":corpo"/>  
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </p:panel>   
+            
+            <p:dialog id="dlgNewProfissao" widgetVar="dlgNewProfissao" header="Gerenciar Profissões" modal="true" closable="false" minimizable="false" responsive="true" resizable="false" position="center center" >
+                
+                <p:ajax event="close" update=":corpo:formMembro:cbProfissao :corpo:formMembro:profissaoParente" />
+                
+                <p:panelGrid id="pgNewProfissao" layout="grid" columns="2" columnClasses="ui-grid-col-4, ui-grid-col-8" styleClass="ui-fluid panelgrid-noborder">
+                    <p:outputLabel value="Descrição" styleClass="label"/>
+                    <p:inputText value="#{principalBean.profissao.descricao}" />
+                </p:panelGrid>
+                <p:toolbar style="margin-top: 20px;" >
+                    <p:toolbarGroup>
+                        <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{principalBean.salvarProfissao()}" process="@this,pgNewProfissao" update="dtNewProfissao"/>
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{principalBean.limparProfissao()}" process="@this" update="pgNewProfissao" oncomplete="PF('dlgNewProfissao').hide();"/>                                               
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <h:panelGroup layout="block" id="pgDtNewProfissao">
+                    <p:dataTable 
+                        id="dtNewProfissao"
+                        value="#{principalBean.listaProfissao}" 
+                        rendered="#{principalBean.listaProfissao.size() gt 0}" 
+                        var="p" 
+                        reflow="true" 
+                        rows="10" 
+                        paginator="true" 
+                        paginatorAlwaysVisible="false" 
+                        style="margin-top: 20px; max-width: 300px;" >
+                        <p:column headerText="Profissão" sortable="true" sortBy="#{p.descricao}">
+                            <h:outputText value="#{p.descricao}" />
+                        </p:column>
+                        <p:column styleClass="colOpt1">
+                            <p:commandButton icon="ui-icon-trash" title="Excluir Profissão" action="#{principalBean.excluir(p)}" process="@this" update=":corpo:pgDtNewProfissao"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </p:dialog>  
+            
+            <p:dialog id="dlgNovoMinisterio" widgetVar="dlgNovoMinisterio" header="Gerenciar Ministérios" modal="true" closable="false" minimizable="false" responsive="true" resizable="false" position="center center" >                
+                
+                <p:ajax event="close" update=":corpo:formMembro:pgdMinisterioMemb" />
+                
+                <p:panelGrid id="pgCadMin" layout="grid" columns="2" columnClasses="ui-grid-col-4, ui-grid-col-8" styleClass="ui-fluid panelgrid-noborder">
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescMin" value="#{principalBean.ministerio.descricao}"/>                
+                </p:panelGrid>
+                <p:toolbar style="margin-top: 20px;" >
+                    <p:toolbarGroup>
+                        <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarMinisterio()}" process="@this,pgCadMin" update="pgListMin pgCadMin"/>
+                        <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparMinisterio()}" process="@this" update="pgCadMin" oncomplete="PF('dlgNovoMinisterio').hide()"/>
+                    </p:toolbarGroup>
+                </p:toolbar>                
+                <h:panelGroup layout="block" id="pgListMin">
+                    <p:dataTable 
+                        value="#{principalBean.listaMinisterios}" 
+                        var="m" 
+                        rendered="#{principalBean.listaMinisterios.size() gt 0}" 
+                        style="margin-top: 20px; max-width: 300px;"
+                        rows="10"
+                        reflow="true"
+                        paginator="true"
+                        paginatorAlwaysVisible="false">
+                        <p:column headerText="Ministério">
+                            <h:outputText value="#{m.descricao}"/>
+                        </p:column>
+                        <p:column styleClass="colOpt2">
+                            <p:commandButton action="#{principalBean.setMinisterio(m)}" icon="ui-icon-pencil" title="Editar Ministério" process="@this" update=":corpo:pgCadMin"/>
+                            <p:commandButton action="#{principalBean.excluir(m)}" icon="ui-icon-trash" title="Excluir Ministério" process="@this" update=":corpo:pgListMin"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </p:dialog>
+            
+            <p:dialog id="dlgNovoCargo" widgetVar="dlgNovoCargo" header="Cadastro de Cargo" modal="true" closable="false" minimizable="false" resizable="false" responsive="true" position="center center">   
+                
+                <p:ajax event="close" update=":corpo:formMembro:pgdCargoMemb" />
+                
+                <p:panelGrid id="pgCadCargo" layout="grid" columns="2" columnClasses="ui-grid-col-4, ui-grid-col-8" styleClass="ui-fluid panelgrid-noborder">
+                    <h:outputLabel value="Ministério: " styleClass="label" />
+                    <p:selectOneMenu id="cbMinCargo" value="#{principalBean.idMinCargoSel}">
+                        <f:selectItems value="#{principalBean.listaMinisterios}" var="min" itemLabel="#{min.descricao}" itemValue="#{min.id}" />
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Descrição: " styleClass="label" />
+                    <p:inputText id="itDescCargo" value="#{principalBean.cargo.descricao}"/>                       
+                </p:panelGrid>
+                <p:toolbar style="margin-top: 20px;" >
+                    <p:toolbarGroup>
+                        <p:commandButton icon="ui-icon-disk" title="Salvar" value="Salvar" action="#{principalBean.salvarCargo()}" process="@this,pgCadCargo" update=":corpo:pgListCargo pgCadCargo"/>
+                        <p:commandButton icon="ui-icon-cancel" title="Cancelar" value="Cancelar" action="#{principalBean.limparCargo()}" process="@this" update="pgCadCargo" oncomplete="PF('dlgNovoCargo').hide()"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <h:panelGroup layout="block" id="pgListCargo" >
+                    <p:dataTable 
+                        value="#{principalBean.listaCargo}" 
+                        var="c" 
+                        rendered="#{principalBean.listaCargo.size() gt 0}" 
+                        style="margin-top: 20px; max-width: 300px;"
+                        reflow="true"
+                        rows="10"
+                        paginator="true"
+                        paginatorAlwaysVisible="false">
+                        <p:column headerText="Ministério">
+                            <h:outputText value="#{c.ministerio.descricao}"/>
+                        </p:column>
+                        <p:column headerText="Cargo" >
+                            <h:outputText value="#{c.descricao}"/>
+                        </p:column>
+                        <p:column styleClass="colOpt1">
+                            <p:commandButton action="#{principalBean.excluir(c)}" icon="ui-icon-trash" title="Excluir Cargo" process="@this" update=":corpo:pgListCargo"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

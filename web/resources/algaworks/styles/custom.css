@@ -1,0 +1,38 @@
+/* BASE */
+body {
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/* TABVIEW */
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+    color: #555;
+}
+
+@media (max-width: 640px) {
+	.ui-tabs.ui-tabs-top > .ui-tabs-nav li {
+		width: 100%;
+	}
+}
+
+/* PANELGRID */
+.ui-panelgrid.panelgrid-noborder .ui-grid-responsive {
+	border: none;
+}
+
+.panelgrid-nopadding .ui-panelgrid-cell{
+    padding: 4px 0px 4px 0px !important;
+}
+
+@media (max-width: 640px) {
+	.ui-panelgrid.panelgrid-noborder .ui-grid-responsive .ui-grid-row {
+		border: none;
+	}
+}
+
+.fa-bars {
+    color: #333 !important;
+    font-size: 25px !important;
+    margin-top: 12px !important;
+}

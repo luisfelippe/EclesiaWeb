@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.Parente" table="parente" >
+        <id column="ID_PARENTE" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="nome" type="java.lang.String">
+            <column name="NOME"/>
+        </property>
+        <property name="masculino" type="char">
+            <column name="SEXO"/>
+        </property>
+        <property name="dtNasc" type="java.sql.Date">
+            <column name="DATANASC"/>
+        </property>
+        <many-to-one class="ControleMembros.CLN.CDP.Profissao" fetch="join" name="profissao">
+            <column name="PROFISSAO"/>
+        </many-to-one>
+        <many-to-one class="ControleMembros.CLN.CDP.GrauParentesco" fetch="join" name="parentesco">
+            <column name="GRAU_PARENTESCO"/>
+        </many-to-one>
+    </class>
+  
+</hibernate-mapping>

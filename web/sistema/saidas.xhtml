@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:view>                            
+        <h:panelGrid cellpadding="0" cellspacing="0" class="valores">                            
+            <h:form id="form2"> 
+                <h:panelGrid columns="2" cellpadding="0" cellspacing="5" class="valores" columnClasses="col1">
+                    <h:outputLabel value="Tipo:" for="tipo"/>
+                    <p:selectOneMenu id="tipo" value="#{saidaBean.idTipo}" effect="fade" style="width: 158px;" >  
+                        <f:selectItem itemLabel="Selecione um" itemValue="" />  
+                        <f:selectItems value="#{saidaBean.tipos}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.id}"/>  
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Valor:" for="valor"/>
+                    <p:inputText id="valor" value="#{saidaBean.saida.valor}" />
+
+                    <h:outputLabel value="Data:" for="cal"/>
+                    <p:calendar id="cal" navigator="true" yearRange="c-80" value="#{saidaBean.saida.data}" pattern="dd/MM/yyyy" locale="pt_BR" timeZone="America/Sao_Paulo" />
+
+                    <h:outputLabel value="Descrição" for="descricao"/>
+                    <p:inputTextarea id="descricao" value="#{saidaBean.saida.descricao}" cols="60" rows="5"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3" cellpadding="0" cellspacing="5">
+                    <p:commandButton value="Salvar" ajax="false" action="#{saidaBean.addSaida()}"/>
+                    <p:commandButton value="Limpar" ajax="false" action="#{saidaBean.limpar()}" />
+                    <p:commandButton value="Cancelar" ajax="false" action="#{saidaBean.cancelar()}" immediate="true"/>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGrid>
+                    
+    </f:view>                  
+</html>

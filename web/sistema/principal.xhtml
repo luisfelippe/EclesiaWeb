@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../template/template.xhtml">
+        <ui:define name="head">
+            <style>
+                .principal.ui-widget-content{
+                    background-color: transparent !important;
+                    border: 0px !important;
+                }
+                
+                .principal {
+                    margin: 0px !important;
+                    padding: 0px !important;
+                }
+                
+                .principal .ui-panel-content{
+                    padding: 0px !important;
+                }
+                
+                .panelDash {
+/*                    width: fit-content; 
+                    display: table; */
+                    margin-top: 5px;
+                    margin-bottom: 40px;
+                }
+                
+                .panelDash .ui-panelgrid, .panelDash .ui-panelgrid-content, .panelDash .ui-panelgrid-cell {
+                    padding: 0px;
+                    background-color: transparent !important;
+                }
+                
+                .dashboard {
+/*                    width: fit-content; 
+                    float: left; 
+                    display: table; */
+                    color: #000 !important;
+                    margin: 3px;
+                }
+                
+                .dashboard .ui-datatable thead {
+                    display: none;
+                }
+                
+                .secretaria .ui-widget-content  {
+                    background-color: dodgerblue !important;
+                }
+                
+                .financeiro .ui-widget-content {
+                    background-color: seagreen !important;
+                }
+                
+                .dashboard-content {
+/*                    width: 100%; 
+                    display: table-row; */
+                    color: white !important;
+                }
+                
+                .dashboard-tile {
+/*                    width: 100%;
+                    height: 100%;
+                    float: left; */
+                    text-align: center;                     
+                    color: #FFF !important;
+                    padding: 10px 0px;
+                }
+                
+                .secretaria .dashboard-tile {
+                    border-color: royalblue;
+                }
+                
+                .financeiro .dashboard-tile {
+                    border-color: teal;
+                }
+                
+                .dashboard-title, dashboard-data {
+                    display: block;
+                }
+                
+                .dashboard-title {
+                    
+                }
+                
+                .dashboard-data {
+                    font-weight: bold;
+                }
+                
+                .title {
+                    background-color: #CCC; font-size: 16px !important; text-align: center; font-weight: bold; padding: 5px 0px 5px 0px;
+                }
+                
+                .secretaria .title {
+                    background-color: royalblue !important; 
+                    color: #FFF !important;
+                }
+                
+                .financeiro .title {
+                    background-color: teal !important; 
+                    color: #FFF;
+                }
+                
+            </style>
+        </ui:define>
+        <ui:define name="content">    
+            <h1 class="aw-page-title">Dashboard</h1>
+            <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="panelDash ui-panelgrid-blank">
+                <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="dashboard secretaria ui-panelgrid-blank">
+                    <h:panelGroup layout="block" styleClass="title secretaria">
+                        <h:outputText value="Secretaria" />
+                    </h:panelGroup>
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="dashboard-content ui-panelgrid-blank">
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMembros}" styleClass="dashboard-data"/>
+                            <h:outputText value="Membros" styleClass="dashboard-title"/>                                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMembrosOciosos}" styleClass="dashboard-data"/>
+                            <h:outputText value="Membros Ociosos" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMinisterios}" styleClass="dashboard-data"/>
+                            <h:outputText value="Ministérios" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMembrosAtivos}" styleClass="dashboard-data"/>
+                            <h:outputText value="Membros Ativos" styleClass="dashboard-title"/>                                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMembrosInativos}" styleClass="dashboard-data"/>
+                            <h:outputText value="Membros Inativos" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdMembrosBatizados}" styleClass="dashboard-data"/>
+                            <h:outputText value="Membros Batizados" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </p:panelGrid>
+                
+                <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="dashboard financeiro ui-panelgrid-blank">
+                    <h:panelGroup layout="block" styleClass="title financeiro">
+                        <h:outputText value="Financeiro" />
+                    </h:panelGroup>
+                    <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="dashboard-content ui-panelgrid-blank">
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.qtdContribuintes}" styleClass="dashboard-data"/>
+                            <h:outputText value="Contribuintes #{principalBean.mesAnteriorExtenso}" styleClass="dashboard-title"/>
+                        </h:panelGroup>                                    
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.valorArrecadacaoMesAnterior}" styleClass="dashboard-data">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                            <h:outputText value="Entrada #{principalBean.mesAnteriorExtenso}" styleClass="dashboard-title"/>                                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.valorArrecadacaoMesAtual}" styleClass="dashboard-data">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                            <h:outputText value="Entrada #{principalBean.mesExtenso}" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.valorSaidaMesAnterior}" styleClass="dashboard-data">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                            <h:outputText value="Saída #{principalBean.mesAnteriorExtenso}" styleClass="dashboard-title"/>
+                        </h:panelGroup>                                    
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.valorSaidaMesAtual}" styleClass="dashboard-data">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                            <h:outputText value="Saída #{principalBean.mesExtenso}" styleClass="dashboard-title"/>                                        
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" styleClass="dashboard-tile">
+                            <h:outputText value="#{principalBean.valorMedioPorContribuinte}" styleClass="dashboard-data">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                            <h:outputText value="Dízimo médio (#{principalBean.mesAnteriorExtenso})" styleClass="dashboard-title"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </p:panelGrid>
+                <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="dashboard ui-panelgrid-blank">
+                    <h:panelGroup layout="block" styleClass="title">
+                        <h:outputText value="Aniversariantes de #{principalBean.mesExtenso}" />
+                    </h:panelGroup>
+                    <p:dataTable value="#{principalBean.aniversariantes}" var="aniv" emptyMessage="Não há aniversariantes neste mês" reflow="true" >
+                        <p:column >
+                            <h:outputText value="#{aniv.nome}"/>
+                        </p:column>
+                        <p:column style="width: 33px;">
+                            <h:outputText value="#{aniv.dataNasc}">
+                                <f:convertDateTime pattern="dd/MM" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:panelGrid>
+            </p:panelGrid>
+        </ui:define>
+    </ui:composition>
+</html>

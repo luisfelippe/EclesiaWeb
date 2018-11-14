@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+  <joined-subclass extends="ControleMembros.CLN.CDP.Pessoa" name="ControleMembros.CLN.CDP.Membro" table="membro">
+    <key column="ID_PESSOA"/>
+    <property name="DataNasc" type="java.sql.Date">
+      <column name="DATANASC"/>
+    </property>
+    <property name="Sexo" type="char" >
+      <column name="SEXO" default="'M'"/>
+    </property>
+    <property name="RG" type="java.lang.String">
+      <column name="RG"/>
+    </property>
+    <property name="CPF" type="java.lang.String">
+      <column name="CPF"/>
+    </property>
+    <many-to-one class="ControleMembros.CLN.CDP.EstadoCivil" fetch="join" name="estado_Civil">
+      <column name="ESTADO_CIVIL"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.Profissao" fetch="join" name="profissao">
+      <column name="PROFISSAO"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.DadosProfissionais" fetch="join" name="dadosProfissionais">
+      <column name="DADOS_PROFISSIONAIS"/>
+    </many-to-one>
+    <many-to-one class="ControleMembros.CLN.CDP.Escolaridade" fetch="join" name="escolaridade">
+      <column name="ESCOLARIDADE"/>
+    </many-to-one>
+    <property name="descCursoEscolaridade" type="java.lang.String">
+      <column name="DESC_ESCOLARIDADE"/>
+    </property>
+    <property name="falecido" type="boolean">
+      <column name="falecido" default="false"/>
+    </property>
+    <property name="inativo" type="boolean">
+      <column name="inativo" default="false"/>
+    </property>
+    <property name="desempregado" type="boolean">
+      <column name="desempregado" default="false"/>
+    </property>
+    <property name="dataBatismo" type="java.sql.Date">
+      <column name="DATABAT"/>
+    </property>
+    <bag cascade="all" fetch="select" name="parentes" lazy="false">
+      <key column="ID_PESSOA"/>
+      <one-to-many class="ControleMembros.CLN.CDP.Parente"/>
+    </bag>
+    <bag cascade="all" fetch="select" name="dadosMinisteriais" lazy="false">
+      <key column="id_membro"/>
+      <one-to-many class="ControleMembros.CLN.CDP.DadosMinisteriais"/>
+    </bag>
+    <property name="dataAdmissao" type="java.sql.Date">
+      <column name="data_admissao"/>
+    </property>
+    <property name="tipoFrequentador">
+        <column name="tipo_frequentador" />
+        <type name="org.hibernate.type.EnumType">
+            <param name="enumClass">ControleMembros.CLN.CDP.TipoFrequentador</param>
+            <param name="type">12</param>
+        </type>
+    </property>
+    <property name="tipoAdmissao">
+        <column name="tipo_admissao" />
+        <type name="org.hibernate.type.EnumType">
+            <param name="enumClass">ControleMembros.CLN.CDP.TipoAdmissao</param>
+            <param name="type">12</param>
+        </type>
+    </property>
+    <property name="faixaEtaria">
+        <column name="faixa_etaria" />
+        <type name="org.hibernate.type.EnumType">
+            <param name="enumClass">ControleMembros.CLN.CDP.FaixaEtaria</param>
+            <param name="type">12</param>
+        </type>
+    </property>
+  </joined-subclass>
+</hibernate-mapping>

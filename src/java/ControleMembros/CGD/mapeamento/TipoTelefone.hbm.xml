@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.TipoTelefone" table="tipo_telefone" lazy="false">
+        <id column="id_tipo_telefone" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="descricao" type="java.lang.String">
+            <column name="descricao"/>
+        </property>
+        <property name="mascara" type="java.lang.String">
+            <column name="mascara"/>
+        </property>
+    </class>
+</hibernate-mapping>

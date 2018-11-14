@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 12/10/2012 19:16:12 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="ControleMembros.CLN.CDP.Telefone" table="telefone">
+        <id column="ID_TELEFONE" name="id" type="long">
+            <generator class="identity"/>
+        </id>
+<!--        <property name="DDD" type="int">
+            <column name="DDD" />
+        </property>-->
+        <property name="Numero" type="java.lang.String">
+            <column name="NUMERO" />
+        </property>
+        <many-to-one class="ControleMembros.CLN.CDP.TipoTelefone" fetch="join" name="tipo">
+            <column name="TIPO"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

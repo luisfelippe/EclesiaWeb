@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="../template/template.xhtml">        
+        <ui:define name="topo">
+            <p:breadCrumb style="margin-bottom: 10px;">
+                <p:menuitem value="Principal" action="principal.xhtml"/>
+                <p:menuitem value="Financeiro" action="financeiro.xhtml" />
+            </p:breadCrumb>  
+        </ui:define>
+        <ui:define name="content">
+            <h1 class="aw-page-title">Financeiro</h1>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton value="Novo" icon="ui-icon-plusthick" action="#{financeiroBean.limpar()}" process="@this" update=":corpo"/>
+                    <p:commandButton value="Salvar" icon="ui-icon-disk" action="#{financeiroBean.addLancamento()}" process="@this,pgDadosFinanceiros" update=":corpo" rendered="#{financeiroBean.lancamento ne null}"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{financeiroBean.cancelar()}" process="@this" update=":corpo" rendered="#{financeiroBean.lancamento ne null}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+            <h:panelGroup layout="block" id="pgDadosFinanceiros">
+                <p:panel header="Lançamentos" rendered="#{financeiroBean.lancamento ne null}">
+                    <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="ui-fluid panelgrid-noborder" > 
+                        <p:outputLabel value="Selecione uma opção:" styleClass="label"/>
+                        <p:selectOneRadio value="#{financeiroBean.opcao}">
+                            <f:selectItems value="#{financeiroBean.opcoes}" var="op" itemValue="#{op}" itemLabel="#{op.descricao}" />
+                            <p:ajax process="@this" listener="#{financeiroBean.atualizaListaCategoria()}" update="pgLancamento" partialSubmit="true"/>
+                        </p:selectOneRadio>
+                    </p:panelGrid>
+
+                    <p:separator />
+                    
+                    <h:panelGroup id="pgLancamento" layout="block" style="margin-top: 10px;"> 
+                        <h:panelGroup id="pgLancamentoOpt1" layout="block">
+                            <p:panelGrid layout="grid" columns="1" columnClasses="ui-grid-col-12" styleClass="ui-fluid panelgrid-noborder" >  
+                                <!--                                <p:panelGrid id="pgdBuscaMembro" layout="grid" columns="3" columnClasses="ui-grid-col-2, ui-grid-col-9, ui-grid-col-1" styleClass="panelgrid-noborder panelgrid-nopadding" rendered="#{financeiroBean.opcao.id eq 0}">
+                                    <h:outputLabel value="Membro:" styleClass="label"/>
+                                    <p:inputText value="#{financeiroBean.membro.id}">
+                                        <f:convertNumber />
+                                    </p:inputText>
+                                    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{financeiroBean.buscaMembro()}" process="@this,pgdBuscaMembro" update="pgLancamentoOpt1"/>
+                                    <p:autoComplete 
+                                        id="acMembro" 
+                                        value="#{financeiroBean.membro}" 
+                                        completeMethod="#{financeiroBean.completaCampo}" 
+                                        queryDelay="1000"
+                                        var="P" 
+                                        itemLabel="#{P['class'].simpleName == 'Membro' ? ''.concat(P.id).concat(' - ').concat(P.nome) : ''}" 
+                                        itemValue="#{P}" 
+                                        converter="MembroConverter" 
+                                        forceSelection="true" 
+                                        minQueryLength="1"/>
+                                    <p:watermark value="Busque pelo Código ou Nome!" for="acMembro"/>   
+                                </p:panelGrid>
+
+                                <h:outputLabel value="Nome: #{financeiroBean.membro.nome}" rendered="#{financeiroBean.opcao.id eq 0 and financeiroBean.membro.id > 0}" styleClass="label"/>-->
+                                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="panelgrid-noborder panelgrid-nopadding">
+                                    <h:outputLabel value="Membro:" styleClass="label" rendered="#{financeiroBean.opcao.id eq 0}"/>
+                                    <p:autoComplete 
+                                        id="acMembro" 
+                                        value="#{financeiroBean.membro}" 
+                                        completeMethod="#{financeiroBean.completaCampo}" 
+                                        queryDelay="1000"
+                                        var="P" 
+                                        itemLabel="#{P['class'].simpleName == 'Membro' ? ''.concat(P.id).concat(' - ').concat(P.nome) : ''}" 
+                                        itemValue="#{P}" 
+                                        converter="MembroConverter" 
+                                        forceSelection="true" 
+                                        minQueryLength="1"
+                                        rendered="#{financeiroBean.opcao.id eq 0}"/>
+                                    
+                                    <p:outputLabel value="Tipo:" for="tipo1" styleClass="label"/>
+                                    <p:selectOneMenu id="tipo1" value="#{financeiroBean.idCategoriaSel}" >  
+                                        <f:selectItem itemLabel="Selecione um" itemValue="0" />  
+                                        <f:selectItems value="#{financeiroBean.categorias}" var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo.id}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Valor:" styleClass="label"/>
+                                    <p:inputText value="#{financeiroBean.lancamento.valor}" >
+                                        <f:convertNumber />
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Data:" styleClass="label"/>
+                                    <p:calendar id="cal1" navigator="true" yearRange="c-80:c+0" value="#{financeiroBean.lancamento.data}" pattern="dd/MM/yyyy" locale="pt_BR" />
+                                    
+                                    <h:outputLabel value="Descrição" for="descricao" styleClass="label" rendered="#{financeiroBean.opcao.id eq 1}"/>
+                                    <p:inputTextarea id="descricao2" value="#{financeiroBean.lancamento.descricao}" cols="60" rows="5" rendered="#{financeiroBean.opcao.id eq 1}"/>
+                                </p:panelGrid>                                
+                            </p:panelGrid>  
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Novo" icon="ui-icon-refresh" process="@this" update=":corpo" action="#{financeiroBean.limpar()}" />
+                                    <p:commandButton value="Salvar" icon="ui-icon-disk" process="@this,pgDadosFinanceiros" update=":corpo" action="#{financeiroBean.addLancamento()}"/>                                    
+                                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" process="@this" update=":corpo" action="#{financeiroBean.cancelar()}"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </h:panelGroup>  
+                        <p:watermark value="Busque pelo Código ou Nome!" for="acMembro" rendered="#{financeiroBean.opcao.id eq 0}"/>   
+                    </h:panelGroup>
+                </p:panel>
+            </h:panelGroup>
+            
+            <p:panel id="content" header="Relatório de Lançamentos"  toggleable="true" collapsed="#{financeiroBean.lancamento ne null}" style="margin-top: 20px; margin-bottom: 40px;">
+                <h:panelGroup layout="block" id="pgRelatorioFinanceiro">
+                    <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10" styleClass="ui-fluid panelgrid-noborder"> 
+                        <p:outputLabel value="Selecione uma opção:" styleClass="label"/>
+                        <p:selectOneListbox value="#{relFinanceiroBean.idCategoriaSel}">
+                            <f:selectItem itemLabel="Relatório de Dizimista" itemValue="1" />
+                            <f:selectItem itemLabel="Relatório de Balanço" itemValue="2" />
+                            <f:selectItem itemLabel="Outro" itemValue="3" />
+                        </p:selectOneListbox>
+                        
+                        <p:outputLabel value="Período:" for="dtIniBusca" styleClass="label"/>
+                        <p:panelGrid layout="grid" columns="3" columnClasses="ui-grid-col-5, ui-grid-col-2, ui-grid-col-5" styleClass="panelgrid-noborder panelgrid-nopadding">
+                            <p:calendar id="dtIniBusca" navigator="true" value="#{relFinanceiroBean.dataIni}" pattern="dd/MMM/yyyy" maxdate="#{principalBean.dataAtual}" locale="pt_BR" >
+                                <p:ajax event="dateSelect" process="@this" partialSubmit="true" global="false" update="dtFimBusca"/>
+                            </p:calendar>
+                            <h:outputLabel value="à" styleClass="label label-margin" />
+                            <p:calendar id="dtFimBusca" navigator="true" value="#{relFinanceiroBean.dataFim}" pattern="dd/MMM/yyyy" maxdate="#{principalBean.dataAtual}" mindate="#{relFinanceiroBean.dataIni}" locale="pt_BR"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:panelGroup>
+                <p:toolbar style="margin-top: 20px;" >
+                    <p:toolbarGroup>
+                        <p:commandButton value="Buscar" icon="ui-icon-search" action="#{relFinanceiroBean.buscar()}" process="@this,pgRelatorioFinanceiro" update="resultado"/>
+                        <p:commandButton value="Limpar" icon="ui-icon-refresh" process="@this" action="#{relFinanceiroBean.limpar()}" update=":corpo" />                       
+                    </p:toolbarGroup>
+                </p:toolbar>
+                
+                <h:panelGroup layout="block" id="resultado" style="margin-top: 20px;">
+                    <p:dataTable 
+                        id="dizimistas" 
+                        var="dizimo" 
+                        value="#{relFinanceiroBean.lista}" 
+                        rowKey="#{membro.nome}" 
+                        reflow="true"
+                        rendered="#{relFinanceiroBean.lista.size() gt 0 and relFinanceiroBean.idCategoriaSel eq 1}">
+                        <f:facet name="header">
+                            <h:outputText value="Resultado - Dizimistas do Período" />
+                        </f:facet>
+                        <p:column sortBy="#{dizimo.membro.id}" styleClass="colOpt4 center">
+                            <f:facet name="header">
+                                <h:outputText value="Cód. Membro" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.membro.id}" />
+                        </p:column>
+                        <p:column sortBy="#{dizimo.membro.nome}">
+                            <f:facet name="header">
+                                <h:outputText value="Nome" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.membro.nome}" />
+                        </p:column>
+                        <p:column sortBy="#{dizimo.data}" styleClass="colOpt2">
+                            <f:facet name="header">
+                                <h:outputText value="Data" />
+                            </f:facet>
+                            <h:outputText value="#{dizimo.data}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                            </h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{dizimo.valor}" styleClass="colOpt4 center">
+                            <f:facet name="header">
+                                <h:outputText value="Valor" />
+                            </f:facet>
+                            <f:facet name="footer">
+                                <h:outputText value="Total: " style="font-weight: bold;"/>
+                                <h:outputText value="#{relFinanceiroBean.totalIn}" >
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{dizimo.valor}" >
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:dataTable 
+                        id="saidas" 
+                        var="saida" 
+                        value="#{relFinanceiroBean.lista}" 
+                        reflow="true"
+                        rendered="#{relFinanceiroBean.lista.size() gt 0 and relFinanceiroBean.idCategoriaSel eq 2}">
+                        <f:facet name="header">
+                            <h:outputText value="Resultado - Balanço do Período" />
+                        </f:facet>
+                        <p:column sortBy="#{saida.id}" >
+                            <f:facet name="header">
+                                <h:outputText value="Cod. Lançamento" />
+                            </f:facet>
+                            <h:outputText value="#{saida.id}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}"/>
+                        </p:column>
+                        <p:column sortBy="#{saida.tipo.descricao}" styleClass="colOpt2" >
+                            <f:facet name="header">
+                                <h:outputText value="Tipo" />
+                            </f:facet>
+                            <h:outputText value="#{saida.tipo.descricao}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}"/>
+                        </p:column>
+                        <p:column sortBy="#{saida.categoria.descricao}" >
+                            <f:facet name="header">
+                                <h:outputText value="Categoria" />
+                            </f:facet>
+                            <h:outputText value="#{saida.categoria.descricao}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}"/>
+                        </p:column>
+                        <p:column sortBy="#{saida.data}" styleClass="colOpt2">
+                            <f:facet name="header">
+                                <h:outputText value="Data" />
+                            </f:facet>
+                            <h:outputText value="#{saida.data}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}">
+                                <f:convertDateTime pattern="dd/MMM/yyyy"/> 
+                            </h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{saida.valor}" >
+                            <f:facet name="header">
+                                <h:outputText value="Valor Entrada" />
+                            </f:facet>
+<!--                            <f:facet name="footer">
+                                <h:outputText value="Total: " style="font-weight: bold;"/>
+                                <h:outputText value="#{relFinanceiroBean.totalIn}" >
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </f:facet>-->
+                            <h:outputText value="#{saida.valor}" rendered="#{saida.tipo.id eq 0}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}">
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column sortBy="#{saida.valor}">
+                            <f:facet name="header">
+                                <h:outputText value="Valor Saida" />
+                            </f:facet>
+<!--                            <f:facet name="footer">
+                                <h:outputText value="Total: " style="font-weight: bold;"/>
+                                <h:outputText value="#{relFinanceiroBean.totalOut}" >
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </f:facet>-->
+                            <h:outputText value="#{saida.valor}" rendered="#{saida.tipo.id eq 1}" styleClass="#{saida.tipo.id eq 0 ? 'lbEntrada' : 'lbSaida'}">
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="4" style="text-align:right; font-weight: bold;" footerText="Totais:" />
+                                <p:column >
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{relFinanceiroBean.totalIn}" >
+                                            <f:convertNumber type="currency" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                                <p:column >
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{relFinanceiroBean.totalOut}" >
+                                            <f:convertNumber type="currency" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                            </p:row>
+<!--                            <p:row>
+                                <p:column colspan="4" style="text-align:right" footerText="Saldo:" />
+                                <p:column colspan="2">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{relFinanceiroBean.totalIn - relFinanceiroBean.totalOut}" >
+                                            <f:convertNumber type="currency" />
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
+                            </p:row>-->
+                        </p:columnGroup>
+                    </p:dataTable>
+                </h:panelGroup>
+            </p:panel>            
+        </ui:define>
+    </ui:composition>
+</html>
